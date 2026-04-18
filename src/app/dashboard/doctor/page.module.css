@@ -1,0 +1,279 @@
+/* ═══════════════════════════════════════════════════
+   Doctor Dashboard (Command Center) Styles
+   ═══════════════════════════════════════════════════ */
+
+.dashboard {
+  max-width: var(--content-max-width);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.greeting {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ─── Metrics ─────────────────────────────────────── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 1024px) { .metricsGrid { grid-template-columns: repeat(2, 1fr); } }
+
+.metricCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  opacity: 0;
+  transition: all var(--transition-normal);
+}
+
+.metricCard:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.metricIcon { font-size: 1.5rem; }
+
+.metricData {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.metricChange {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* ─── Main Grid ───────────────────────────────────── */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 1200px) { .mainGrid { grid-template-columns: 1fr; } }
+
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  opacity: 0;
+}
+
+.alertsSection {
+  grid-column: 1 / -1;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.viewAll {
+  font-size: 0.8125rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.viewAll:hover { color: var(--primary-light); }
+
+/* ─── AI Alerts ───────────────────────────────────── */
+.alertsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-md);
+}
+
+.alertCard {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.alert_critical { border-left: 3px solid var(--critical); background: var(--critical-glow); }
+.alert_warning { border-left: 3px solid var(--warning); background: var(--warning-glow); }
+.alert_info { border-left: 3px solid var(--primary); background: var(--primary-glow); }
+
+.alertTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alertPatient {
+  font-size: 0.9375rem;
+}
+
+.alertMsg {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.alertActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+/* ─── Queue ───────────────────────────────────────── */
+.queueList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.queueCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.queueCard:hover {
+  background: var(--bg-card-hover);
+}
+
+.queueCritical {
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  background: var(--critical-glow) !important;
+  animation: pulse 2s infinite;
+}
+
+.queueAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.queueInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.queueNameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.queueNameRow strong { font-size: 0.875rem; }
+
+.queueAiFlag {
+  font-size: 0.6875rem;
+  color: var(--warning);
+  font-weight: 500;
+}
+
+.queueMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+}
+
+.riskGauge svg {
+  transform: rotate(-90deg);
+}
+
+/* ─── Schedule ────────────────────────────────────── */
+.scheduleList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scheduleItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 10px var(--space-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.scheduleItem:hover { background: var(--bg-card-hover); }
+
+.scheduleActive {
+  background: var(--primary-glow) !important;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.scheduleDone { opacity: 0.5; }
+
+.scheduleTime {
+  min-width: 100px;
+}
+
+.scheduleDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scheduleContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}

@@ -1,0 +1,269 @@
+/* ═══════════════════════════════════════════════════
+   Admin Dashboard Styles
+   ═══════════════════════════════════════════════════ */
+
+.dashboard { max-width: var(--content-max-width); }
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.greeting {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ─── KPI Grid ────────────────────────────────────── */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 1200px) { .kpiGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .kpiGrid { grid-template-columns: repeat(2, 1fr); } }
+
+.kpiCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  opacity: 0;
+  transition: all var(--transition-normal);
+}
+
+.kpiCard:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.kpiHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.kpiIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.kpiChange {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.kpiValue {
+  font-size: 1.375rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+.kpiLabel {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ─── Main Grid ───────────────────────────────────── */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 1024px) { .mainGrid { grid-template-columns: 1fr; } }
+
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  opacity: 0;
+}
+
+.sectionWide { grid-column: 1 / -1; }
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.viewAll {
+  font-size: 0.8125rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* ─── System Health ───────────────────────────────── */
+.healthList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.healthItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 10px var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.healthItem:hover { background: var(--bg-card-hover); }
+
+.healthStatus { flex-shrink: 0; }
+
+.healthInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* ─── Compliance ──────────────────────────────────── */
+.complianceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.complianceItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 10px var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.complianceItem:hover { background: var(--bg-card-hover); }
+
+.complianceCheck {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.complianceChecked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.complianceInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* ─── Department Table ────────────────────────────── */
+.deptTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.deptHeader {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr 1fr 1fr;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.deptRow {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr 1fr 1fr;
+  align-items: center;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.deptRow:hover { background: var(--bg-card-hover); }
+
+.deptName {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.deptSatisfaction {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* ─── User Activity ───────────────────────────────── */
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.userItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 10px var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.userItem:hover { background: var(--bg-card-hover); }
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}

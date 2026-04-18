@@ -1,0 +1,367 @@
+/* ═══════════════════════════════════════════════════
+   Patient Dashboard Page Styles
+   ═══════════════════════════════════════════════════ */
+
+.dashboard {
+  max-width: var(--content-max-width);
+}
+
+/* ─── Header ──────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.greeting {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ─── Vitals ──────────────────────────────────────── */
+.vitalsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 1024px) { .vitalsGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .vitalsGrid { grid-template-columns: 1fr; } }
+
+.vitalCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  opacity: 0;
+  transition: all var(--transition-normal);
+}
+
+.vitalCard:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-default);
+  transform: translateY(-2px);
+}
+
+.vitalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.vitalIcon { font-size: 1.25rem; }
+
+.vitalTrend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.vitalValue {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.vitalValue span:first-child {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-family: var(--font-mono);
+}
+
+.vitalUnit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.vitalLabel {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Main Grid ───────────────────────────────────── */
+.mainGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 1024px) { .mainGrid { grid-template-columns: 1fr; } }
+
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  opacity: 0;
+}
+
+.sectionWide {
+  grid-column: 1 / -1;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.viewAll {
+  font-size: 0.8125rem;
+  color: var(--primary);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.viewAll:hover { color: var(--primary-light); }
+
+/* ─── AI Insights ─────────────────────────────────── */
+.insightsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.insightCard {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.insightCard:hover {
+  background: var(--bg-card-hover);
+}
+
+.insight_success { border-left: 3px solid var(--accent); }
+.insight_warning { border-left: 3px solid var(--warning); }
+.insight_info { border-left: 3px solid var(--primary); }
+
+.insightIcon { font-size: 1.25rem; flex-shrink: 0; margin-top: 2px; }
+
+.insightTitle {
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.insightMsg {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ─── Appointments ────────────────────────────────── */
+.appointmentList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.appointmentCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.appointmentCard:hover {
+  background: var(--bg-card-hover);
+}
+
+.aptDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--primary-glow);
+  border-radius: var(--radius-md);
+  min-width: 48px;
+}
+
+.aptDay {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-light);
+  line-height: 1;
+}
+
+.aptMonth {
+  font-size: 0.625rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.aptInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aptInfo strong { font-size: 0.875rem; }
+
+.aptMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+/* ─── Medications ─────────────────────────────────── */
+.medList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.medCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.medCard:hover { background: var(--bg-card-hover); }
+
+.medInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.medInfo strong { font-size: 0.875rem; }
+
+.medAdherence {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* ─── Tasks ───────────────────────────────────────── */
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.taskItem:hover { background: var(--bg-card-hover); }
+
+.taskDone {
+  opacity: 0.5;
+}
+
+.taskDone span { text-decoration: line-through; }
+
+.taskCheck {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.taskChecked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.progressSummary {
+  padding-top: var(--space-sm);
+}
+
+/* ─── Labs ────────────────────────────────────────── */
+.labGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+@media (max-width: 640px) { .labGrid { grid-template-columns: 1fr; } }
+
+.labCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.labCard:hover { background: var(--bg-card-hover); }
+
+.labInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.labInfo strong { font-size: 0.8125rem; }
+
+.labValue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.labNumber {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.labTrend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}

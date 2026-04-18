@@ -1,0 +1,21 @@
+.dashLayout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: var(--space-xl);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  max-width: calc(100vw - var(--sidebar-width));
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0;
+    padding: var(--space-md);
+    max-width: 100vw;
+  }
+}
