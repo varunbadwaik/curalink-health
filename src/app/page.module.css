@@ -214,7 +214,7 @@
   box-shadow: var(--shadow-2xl);
   border: 12px solid var(--bg-card);
   object-fit: cover;
-  background: white;
+  background: #F5FBE6;
 }
 
 @media (max-width: 968px) {
