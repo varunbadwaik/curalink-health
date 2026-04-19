@@ -28,6 +28,7 @@
   background: var(--primary);
   top: -200px; right: -100px;
   animation: float 8s ease-in-out infinite;
+  opacity: 0.1;
 }
 
 .orb2 {
@@ -35,14 +36,16 @@
   background: var(--accent);
   bottom: -150px; left: -100px;
   animation: float 10s ease-in-out infinite reverse;
+  opacity: 0.1;
 }
 
 .orb3 {
   width: 400px; height: 400px;
-  background: var(--purple);
+  background: var(--bg-tertiary);
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   animation: float 12s ease-in-out infinite;
+  opacity: 0.08;
 }
 
 .gridOverlay {
@@ -61,7 +64,7 @@
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(245, 251, 230, 0.8);
   backdrop-filter: blur(16px) saturate(150%);
   border-bottom: 1px solid var(--border-subtle);
 }

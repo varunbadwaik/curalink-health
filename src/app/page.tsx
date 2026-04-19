@@ -132,9 +132,9 @@ export default function LandingPage() {
         <p className={styles.sectionSub}>Role-specific experiences designed for every stakeholder</p>
         <div className={styles.portalCards}>
           {[
-            { role: "Patient Portal", icon: "👤", features: ["Health Records", "Appointments", "Medications", "Telehealth", "Lab Results", "Care Plans"], gradient: "linear-gradient(135deg, #0EA5E9, #0284C7)" },
-            { role: "Doctor Dashboard", icon: "🩺", features: ["Patient Queue", "AI Decision Support", "E-Prescribing", "Care Timeline", "Lab Orders", "Analytics"], gradient: "linear-gradient(135deg, #10B981, #059669)" },
-            { role: "Admin Panel", icon: "⚙️", features: ["User Management", "Workflow Builder", "Compliance Monitor", "Financial Dashboard", "Integration Hub", "Reports"], gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)" },
+            { role: "Patient Portal", icon: "👤", features: ["Health Records", "Appointments", "Medications", "Telehealth", "Lab Results", "Care Plans"], gradient: "linear-gradient(135deg, #778873, #5D6A5A)" },
+            { role: "Doctor Dashboard", icon: "🩺", features: ["Patient Queue", "AI Decision Support", "E-Prescribing", "Care Timeline", "Lab Orders", "Analytics"], gradient: "linear-gradient(135deg, #A1BC98, #778873)" },
+            { role: "Admin Panel", icon: "⚙️", features: ["User Management", "Workflow Builder", "Compliance Monitor", "Financial Dashboard", "Integration Hub", "Reports"], gradient: "linear-gradient(135deg, #D2DCB6, #A1BC98)" },
           ].map((portal, i) => (
             <div key={i} className={styles.portalCard}>
               <div className={styles.portalHeader} style={{ background: portal.gradient }}>
