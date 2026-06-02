@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { Warning } from "@phosphor-icons/react";
 
 export default function ErrorPage({
@@ -61,9 +62,9 @@ export default function ErrorPage({
           <button onClick={() => reset()} className="btn btn-primary" style={{ flex: 1 }}>
             Retry
           </button>
-          <a href="/" className="btn btn-ghost" style={{ flex: 1, textDecoration: "none" }}>
+          <Link href="/" className="btn btn-ghost" style={{ flex: 1, textDecoration: "none" }}>
             Exit Portal
-          </a>
+          </Link>
         </div>
       </div>
     </div>
