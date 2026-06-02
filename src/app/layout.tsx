@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import AuthProvider from "@/providers/AuthProvider";
+import QueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <QueryProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </QueryProvider>
+      </body>
     </html>
   );
 }

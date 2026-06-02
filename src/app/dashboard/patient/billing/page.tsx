@@ -1,5 +1,7 @@
 "use client";
-import { CreditCard } from "@phosphor-icons/react";
+import React, { useState } from "react";
+import { CreditCard, X } from "@phosphor-icons/react";
+import BillingForm from "@/components/forms/BillingForm";
 
 const invoices = [
   { id: "INV-2026-042", description: "Cardiology Consultation — Dr. Sarah Chen", date: "Apr 15, 2026", total: 250.00, insurance: 200.00, copay: 50.00, status: "paid" },
@@ -10,6 +12,7 @@ const invoices = [
 ];
 
 export default function BillingPage() {
+  const [showPayModal, setShowPayModal] = useState(false);
   const totalDue = invoices.filter(i=>i.status==="pending").reduce((s,i)=>s+i.copay,0);
   return (
     <div>
@@ -20,7 +23,7 @@ export default function BillingPage() {
           </h1>
           <p className="text-muted" style={{marginTop:4}}>Manage your medical bills and insurance claims</p>
         </div>
-        <button className="btn btn-primary btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+        <button onClick={() => setShowPayModal(true)} className="btn btn-primary btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
           <CreditCard size={16} /> Make Payment
         </button>
       </div>
@@ -54,6 +57,22 @@ export default function BillingPage() {
           </div>
         ))}
       </div>
+
+      {/* Payment Modal */}
+      {showPayModal && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }} onClick={() => setShowPayModal(false)}>
+          <div style={{ background: "var(--bg-card)", borderRadius: 12, border: "1px solid var(--border-subtle)", padding: 24, width: "100%", maxWidth: 450, position: "relative", boxShadow: "var(--shadow-lg)" }} onClick={e => e.stopPropagation()}>
+            <button style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center" }} onClick={() => setShowPayModal(false)}>
+              <X size={20} />
+            </button>
+            <div style={{ marginBottom: 20 }}>
+              <h2 className="heading-md" style={{ marginBottom: 4 }}>Make Payment</h2>
+              <p className="text-sm text-muted">Complete your pending transaction safely</p>
+            </div>
+            <BillingForm onSuccess={() => setShowPayModal(false)} defaultAmount={totalDue} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

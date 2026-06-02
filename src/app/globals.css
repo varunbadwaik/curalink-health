@@ -392,3 +392,15 @@ img { max-width: 100%; display: block; }
 .status-dot-warning { background: var(--warning); box-shadow: 0 0 6px var(--warning); }
 .status-dot-critical { background: var(--critical); box-shadow: 0 0 6px var(--critical); animation: pulse 1.5s infinite; }
 .status-dot-offline { background: var(--text-muted); }
+
+/* ─── Accessibility Outlines ────────────────────────────────── */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+

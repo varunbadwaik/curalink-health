@@ -15,47 +15,12 @@ import {
   Check,
   ChartBar
 } from "@phosphor-icons/react";
+import dynamic from "next/dynamic";
+const RevenueChart = dynamic(() => import("@/components/charts/AdminCharts").then(m => m.RevenueChart), { ssr: false });
+const DepartmentChart = dynamic(() => import("@/components/charts/AdminCharts").then(m => m.DepartmentChart), { ssr: false });
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { mockApi } from "@/services/api";
 
-const orgMetrics = [
-  { label: "Total Patients", value: "12,847", change: "+342", trend: "up", icon: <UsersThree size={24} weight="duotone" />, color: "var(--primary)" },
-  { label: "Active Providers", value: "186", change: "+8", trend: "up", icon: <Stethoscope size={24} weight="duotone" />, color: "var(--accent)" },
-  { label: "Appointments Today", value: "847", change: "+12%", trend: "up", icon: <CalendarDots size={24} weight="duotone" />, color: "var(--purple)" },
-  { label: "Revenue (MTD)", value: "$2.4M", change: "+18%", trend: "up", icon: <CurrencyDollar size={24} weight="duotone" />, color: "var(--warning)" },
-  { label: "Bed Occupancy", value: "87%", change: "+3%", trend: "up", icon: <Hospital size={24} weight="duotone" />, color: "var(--critical)" },
-  { label: "Avg Wait Time", value: "14 min", change: "-2 min", trend: "down", icon: <Timer size={24} weight="duotone" />, color: "var(--accent)" },
-];
-
-const systemHealth = [
-  { service: "API Gateway", status: "operational", uptime: "99.99%", latency: "45ms" },
-  { service: "Database Cluster", status: "operational", uptime: "99.97%", latency: "12ms" },
-  { service: "AI Engine", status: "operational", uptime: "99.95%", latency: "180ms" },
-  { service: "FHIR Gateway", status: "degraded", uptime: "99.2%", latency: "340ms" },
-  { service: "Notification Service", status: "operational", uptime: "99.98%", latency: "28ms" },
-  { service: "File Storage (S3)", status: "operational", uptime: "99.99%", latency: "65ms" },
-];
-
-const recentUsers = [
-  { name: "Dr. James Park", role: "Physician", department: "Oncology", status: "active", lastActive: "5 min ago" },
-  { name: "Sarah Miller, RN", role: "Nurse", department: "ICU", status: "active", lastActive: "12 min ago" },
-  { name: "Admin: Tom Hayes", role: "Admin", department: "Operations", status: "active", lastActive: "1 hr ago" },
-  { name: "Dr. Lisa Wong", role: "Physician", department: "Pediatrics", status: "inactive", lastActive: "2 days ago" },
-  { name: "Mark Johnson", role: "Technician", department: "Radiology", status: "active", lastActive: "30 min ago" },
-];
-
-const complianceItems = [
-  { title: "HIPAA Audit Log Review", due: "Apr 20, 2026", status: "pending", priority: "high" },
-  { title: "Staff Security Training", due: "Apr 25, 2026", status: "in-progress", priority: "medium" },
-  { title: "Data Backup Verification", due: "Apr 18, 2026", status: "completed", priority: "high" },
-  { title: "Access Control Review", due: "May 1, 2026", status: "pending", priority: "low" },
-];
-
-const departmentPerf = [
-  { dept: "Cardiology", patients: 2340, satisfaction: 94, revenue: "$420K", efficiency: 91 },
-  { dept: "Oncology", patients: 1870, satisfaction: 96, revenue: "$580K", efficiency: 88 },
-  { dept: "Pediatrics", patients: 3120, satisfaction: 92, revenue: "$310K", efficiency: 93 },
-  { dept: "Emergency", patients: 4560, satisfaction: 87, revenue: "$890K", efficiency: 78 },
-  { dept: "Orthopedics", patients: 1540, satisfaction: 91, revenue: "$360K", efficiency: 85 },
-];
 
 function getStatusColor(status: string) {
   switch (status) {
@@ -67,6 +32,67 @@ function getStatusColor(status: string) {
 }
 
 export default function AdminDashboard() {
+  const queryClient = useQueryClient();
+
+  const { data: storeMetrics = [] } = useQuery({
+    queryKey: ["orgMetrics"],
+    queryFn: mockApi.getOrgMetrics,
+  });
+
+  const { data: systemHealth = [] } = useQuery({
+    queryKey: ["systemHealth"],
+    queryFn: mockApi.getSystemHealth,
+  });
+
+  const { data: recentUsers = [] } = useQuery({
+    queryKey: ["recentUsers"],
+    queryFn: mockApi.getRecentUsers,
+  });
+
+  const { data: complianceItems = [] } = useQuery({
+    queryKey: ["complianceItems"],
+    queryFn: mockApi.getComplianceItems,
+  });
+
+  const { data: departmentPerf = [] } = useQuery({
+    queryKey: ["departmentPerf"],
+    queryFn: mockApi.getDepartmentPerf,
+  });
+
+  const completeComplianceMutation = useMutation({
+    mutationFn: mockApi.completeComplianceItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["complianceItems"] });
+    },
+  });
+
+  const updateServiceStatusMutation = useMutation({
+    mutationFn: ({ service, status, latency }: { service: string; status: any; latency: string }) => 
+      mockApi.updateSystemServiceStatus(service, status, latency),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["systemHealth"] });
+    },
+  });
+
+  // Map database metrics to icons dynamically
+  const iconMap: Record<string, { icon: React.ReactNode; color: string }> = {
+    "Total Patients": { icon: <UsersThree size={24} weight="duotone" />, color: "var(--primary)" },
+    "Active Providers": { icon: <Stethoscope size={24} weight="duotone" />, color: "var(--accent)" },
+    "Appointments Today": { icon: <CalendarDots size={24} weight="duotone" />, color: "var(--purple)" },
+    "Revenue (MTD)": { icon: <CurrencyDollar size={24} weight="duotone" />, color: "var(--warning)" },
+    "Bed Occupancy": { icon: <Hospital size={24} weight="duotone" />, color: "var(--critical)" },
+    "Avg Wait Time": { icon: <Timer size={24} weight="duotone" />, color: "var(--accent)" },
+  };
+
+  const orgMetrics = storeMetrics.map((m: any) => ({
+    label: m.label,
+    value: m.value,
+    change: m.change,
+    trend: m.trend,
+    icon: iconMap[m.label]?.icon || <UsersThree size={24} weight="duotone" />,
+    color: iconMap[m.label]?.color || "var(--primary)",
+  }));
+
   return (
     <div className={styles.dashboard}>
       {/* Header */}
@@ -87,7 +113,7 @@ export default function AdminDashboard() {
 
       {/* KPI Grid */}
       <div className={styles.kpiGrid}>
-        {orgMetrics.map((metric, i) => (
+        {orgMetrics.map((metric: any, i: number) => (
           <div key={i} className={`${styles.kpiCard} animate-fade-in stagger-${i + 1}`}>
             <div className={styles.kpiHeader}>
               <span className={styles.kpiIcon} style={{ background: `${metric.color}15`, color: metric.color }}>{metric.icon}</span>
@@ -101,6 +127,22 @@ export default function AdminDashboard() {
         ))}
       </div>
 
+      {/* Analytics Charts */}
+      <div className={styles.chartsGrid}>
+        <div className="card animate-fade-in" style={{ padding: 24 }}>
+          <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: 16 }}>
+            <CurrencyDollar size={20} weight="duotone" style={{ color: "var(--primary)" }} /> System Revenue Trend (MTD)
+          </h2>
+          <RevenueChart />
+        </div>
+        <div className="card animate-fade-in" style={{ padding: 24 }}>
+          <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: 16 }}>
+            <UsersThree size={20} weight="duotone" style={{ color: "var(--accent)" }} /> Department Patient Intake
+          </h2>
+          <DepartmentChart />
+        </div>
+      </div>
+
       {/* Main Grid */}
       <div className={styles.mainGrid}>
         {/* System Health */}
@@ -112,7 +154,7 @@ export default function AdminDashboard() {
             <span className="badge badge-accent">All Systems</span>
           </div>
           <div className={styles.healthList}>
-            {systemHealth.map((svc, i) => (
+            {systemHealth.map((svc: any, i: number) => (
               <div key={i} className={styles.healthItem}>
                 <div className={styles.healthStatus}>
                   <div className="status-dot" style={{ background: getStatusColor(svc.status), boxShadow: `0 0 6px ${getStatusColor(svc.status)}` }} />
@@ -139,9 +181,17 @@ export default function AdminDashboard() {
             <span className="badge badge-warning">2 Pending</span>
           </div>
           <div className={styles.complianceList}>
-            {complianceItems.map((item, i) => (
-              <div key={i} className={styles.complianceItem}>
-                <div className={`${styles.complianceCheck} ${item.status === "completed" ? styles.complianceChecked : ""}`} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {complianceItems.map((item: any, i: number) => (
+              <div key={item.id || i} className={styles.complianceItem}>
+                <div 
+                  className={`${styles.complianceCheck} ${item.status === "completed" ? styles.complianceChecked : ""}`} 
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: item.status !== "completed" ? "pointer" : "default" }}
+                  onClick={() => {
+                    if (item.status !== "completed") {
+                      completeComplianceMutation.mutate(item.id);
+                    }
+                  }}
+                >
                   {item.status === "completed" && (
                     <Check size={10} weight="bold" style={{ color: "white" }} />
                   )}
@@ -173,7 +223,7 @@ export default function AdminDashboard() {
               <span>Revenue</span>
               <span>Efficiency</span>
             </div>
-            {departmentPerf.map((dept, i) => (
+            {departmentPerf.map((dept: any, i: number) => (
               <div key={i} className={styles.deptRow}>
                 <span className={styles.deptName}>{dept.dept}</span>
                 <span className="text-mono text-sm">{dept.patients.toLocaleString()}</span>
@@ -204,13 +254,13 @@ export default function AdminDashboard() {
             <a href="/dashboard/admin/users" className={styles.viewAll}>Manage Users →</a>
           </div>
           <div className={styles.userList}>
-            {recentUsers.map((user, i) => (
+            {recentUsers.map((user: any, i: number) => (
               <div key={i} className={styles.userItem}>
                 <div className={styles.userAvatar} style={{
                   background: user.role === "Physician" ? "var(--accent-glow)" : user.role === "Nurse" ? "var(--primary-glow)" : "var(--purple-glow)",
                   color: user.role === "Physician" ? "var(--accent)" : user.role === "Nurse" ? "var(--primary)" : "var(--purple)"
                 }}>
-                  {user.name.split(" ").map(n => n[0]).slice(0, 2).join("")}
+                  {user.name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
                 </div>
                 <div className={styles.userInfo}>
                   <strong className="text-sm">{user.name}</strong>

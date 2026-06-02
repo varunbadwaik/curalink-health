@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { mockApi } from "@/services/api";
+import dynamic from "next/dynamic";
+const PatientVitalsChart = dynamic(() => import("@/components/charts/PatientVitalsChart"), { ssr: false });
+import BookingForm from "@/components/forms/BookingForm";
+import ProfileForm from "@/components/forms/ProfileForm";
 import {
   Bell,
   Heartbeat,
@@ -21,49 +27,54 @@ import {
   Check,
   TrendDown,
   TrendUp,
-  ArrowRight
+  ArrowRight,
+  X,
+  User
 } from "@phosphor-icons/react";
 
-const upcomingAppointments = [
-  { id: 1, doctor: "Dr. Sarah Chen", specialty: "Cardiology", date: "Apr 22, 2026", time: "10:00 AM", type: "In-Person", status: "confirmed" },
-  { id: 2, doctor: "Dr. Mike Torres", specialty: "General Medicine", date: "Apr 25, 2026", time: "2:30 PM", type: "Telehealth", status: "scheduled" },
-  { id: 3, doctor: "Dr. Priya Patel", specialty: "Dermatology", date: "May 3, 2026", time: "11:15 AM", type: "In-Person", status: "scheduled" },
-];
-
-const medications = [
-  { name: "Lisinopril", dosage: "10mg", frequency: "Once daily", adherence: 95, nextDose: "8:00 PM Today" },
-  { name: "Metformin", dosage: "500mg", frequency: "Twice daily", adherence: 88, nextDose: "9:00 PM Today" },
-  { name: "Atorvastatin", dosage: "20mg", frequency: "Once daily", adherence: 92, nextDose: "10:00 PM Today" },
-];
-
-const recentLabs = [
-  { test: "HbA1c", value: "6.8%", status: "borderline", date: "Apr 10, 2026", trend: "down" },
-  { test: "Blood Pressure", value: "128/82", status: "normal", date: "Apr 15, 2026", trend: "stable" },
-  { test: "Cholesterol (LDL)", value: "115 mg/dL", status: "normal", date: "Apr 10, 2026", trend: "down" },
-  { test: "eGFR", value: "78 mL/min", status: "normal", date: "Apr 10, 2026", trend: "stable" },
-];
-
-const carePlanTasks = [
-  { task: "30-min walk", completed: true },
-  { task: "Blood sugar check", completed: true },
-  { task: "Take medications", completed: false },
-  { task: "Log meal diary", completed: false },
-  { task: "Meditation (10 min)", completed: false },
-];
-
-const aiInsights = [
-  { type: "success", icon: <CheckCircle size={18} weight="duotone" />, title: "Medication Adherence", message: "Your adherence is 92% this month — great job! Keep it up." },
-  { type: "warning", icon: <Warning size={18} weight="duotone" />, title: "HbA1c Trending", message: "Your HbA1c has dropped from 7.2% to 6.8%. Continue your dietary changes." },
-  { type: "info", icon: <Lightbulb size={18} weight="duotone" />, title: "Exercise Reminder", message: "You've completed 4/5 walks this week. One more to hit your goal!" },
-];
 
 export default function PatientDashboard() {
+  const queryClient = useQueryClient();
+  const [showBookModal, setShowBookModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [greeting] = useState(() => {
     const h = new Date().getHours();
     return h < 12 ? "Good Morning" : h < 17 ? "Good Afternoon" : "Good Evening";
   });
 
-  const completedTasks = carePlanTasks.filter(t => t.completed).length;
+  const { data: appointments = [] } = useQuery({
+    queryKey: ["appointments"],
+    queryFn: mockApi.getAppointments,
+  });
+
+  const { data: medications = [] } = useQuery({
+    queryKey: ["medications"],
+    queryFn: mockApi.getMedications,
+  });
+
+  const { data: recentLabs = [] } = useQuery({
+    queryKey: ["labs"],
+    queryFn: mockApi.getLabs,
+  });
+
+  const { data: carePlanTasks = [] } = useQuery({
+    queryKey: ["carePlanTasks"],
+    queryFn: mockApi.getCarePlanTasks,
+  });
+
+  const { data: aiInsights = [] } = useQuery({
+    queryKey: ["aiInsights"],
+    queryFn: mockApi.getAIInsights,
+  });
+
+  const toggleTaskMutation = useMutation({
+    mutationFn: mockApi.toggleCarePlanTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["carePlanTasks"] });
+    },
+  });
+
+  const completedTasks = carePlanTasks.filter((t: any) => t.completed).length;
 
   return (
     <div className={styles.dashboard}>
@@ -74,11 +85,15 @@ export default function PatientDashboard() {
           <p className={styles.subtitle}>Here&apos;s your health overview for today</p>
         </div>
         <div className={styles.headerActions}>
+          <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }} onClick={() => setShowProfileModal(true)}>
+            <User size={16} weight="duotone" />
+            Profile Settings
+          </button>
           <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
             <Bell size={16} weight="duotone" />
             Notifications
           </button>
-          <button className="btn btn-primary btn-sm">
+          <button className="btn btn-primary btn-sm" onClick={() => setShowBookModal(true)}>
             + Book Appointment
           </button>
         </div>
@@ -108,6 +123,14 @@ export default function PatientDashboard() {
         ))}
       </div>
 
+      {/* Vitals History Graph */}
+      <div className="card animate-fade-in" style={{ padding: 24, marginBottom: 24 }}>
+        <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: 16 }}>
+          <Heartbeat size={20} weight="duotone" style={{ color: "var(--primary)" }} /> Vitals Trends (Historical)
+        </h2>
+        <PatientVitalsChart />
+      </div>
+
       {/* Main Grid */}
       <div className={styles.mainGrid}>
         {/* AI Insights */}
@@ -118,15 +141,20 @@ export default function PatientDashboard() {
             </h2>
           </div>
           <div className={styles.insightsList}>
-            {aiInsights.map((insight, i) => (
-              <div key={i} className={`${styles.insightCard} ${styles[`insight_${insight.type}`]}`}>
-                <span className={styles.insightIcon}>{insight.icon}</span>
-                <div>
-                  <strong className={styles.insightTitle}>{insight.title}</strong>
-                  <p className={styles.insightMsg}>{insight.message}</p>
+            {aiInsights.map((insight: any, i: number) => {
+              const icon = insight.type === "success" ? <CheckCircle size={18} weight="duotone" /> 
+                         : insight.type === "warning" ? <Warning size={18} weight="duotone" /> 
+                         : <Lightbulb size={18} weight="duotone" />;
+              return (
+                <div key={i} className={`${styles.insightCard} ${styles[`insight_${insight.type}`]}`}>
+                  <span className={styles.insightIcon}>{icon}</span>
+                  <div>
+                    <strong className={styles.insightTitle}>{insight.title}</strong>
+                    <p className={styles.insightMsg}>{insight.message}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -139,26 +167,46 @@ export default function PatientDashboard() {
             <a href="/dashboard/patient/appointments" className={styles.viewAll}>View All →</a>
           </div>
           <div className={styles.appointmentList}>
-            {upcomingAppointments.map((apt) => (
-              <div key={apt.id} className={styles.appointmentCard}>
-                <div className={styles.aptDate}>
-                  <span className={styles.aptDay}>{apt.date.split(" ")[1].replace(",","")}</span>
-                  <span className={styles.aptMonth}>{apt.date.split(" ")[0]}</span>
-                </div>
-                <div className={styles.aptInfo}>
-                  <strong>{apt.doctor}</strong>
-                  <span className="text-sm text-muted">{apt.specialty} · {apt.time}</span>
-                </div>
-                <div className={styles.aptMeta}>
-                  <span className={`badge ${apt.type === "Telehealth" ? "badge-primary" : "badge-accent"}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                    {apt.type === "Telehealth" ? <VideoCamera size={14} weight="duotone" /> : <Hospital size={14} weight="duotone" />} {apt.type}
-                  </span>
-                  <span className={`badge ${apt.status === "confirmed" ? "badge-accent" : "badge-primary"}`}>
-                    {apt.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+            {appointments.length === 0 ? (
+              <p className="text-sm text-muted" style={{ padding: "12px 0", textAlign: "center" }}>No upcoming appointments found.</p>
+            ) : (
+              appointments.slice(0, 3).map((apt: any) => {
+                // Inline date formatter helper
+                const dateStr = apt.date;
+                let day = "22";
+                let month = "Apr";
+                if (dateStr.includes("-")) {
+                  const [y, m, d] = dateStr.split("-");
+                  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                  day = parseInt(d).toString();
+                  month = months[parseInt(m) - 1] || "Jun";
+                } else {
+                  const parts = dateStr.split(" ");
+                  month = parts[0] || "Apr";
+                  day = parts[1]?.replace(",", "") || "22";
+                }
+                return (
+                  <div key={apt.id} className={styles.appointmentCard}>
+                    <div className={styles.aptDate}>
+                      <span className={styles.aptDay}>{day}</span>
+                      <span className={styles.aptMonth}>{month}</span>
+                    </div>
+                    <div className={styles.aptInfo}>
+                      <strong>{apt.doctorName}</strong>
+                      <span className="text-sm text-muted">{apt.specialty} · {apt.time}</span>
+                    </div>
+                    <div className={styles.aptMeta}>
+                      <span className={`badge ${apt.type === "Telehealth" ? "badge-primary" : "badge-accent"}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                        {apt.type === "Telehealth" ? <VideoCamera size={14} weight="duotone" /> : <Hospital size={14} weight="duotone" />} {apt.type}
+                      </span>
+                      <span className={`badge ${apt.status.toLowerCase() === "confirmed" ? "badge-accent" : "badge-primary"}`}>
+                        {apt.status}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -202,8 +250,13 @@ export default function PatientDashboard() {
             <span className="badge badge-primary">{completedTasks}/{carePlanTasks.length}</span>
           </div>
           <div className={styles.taskList}>
-            {carePlanTasks.map((task, i) => (
-              <div key={i} className={`${styles.taskItem} ${task.completed ? styles.taskDone : ""}`}>
+            {carePlanTasks.map((task: any, i: number) => (
+              <div 
+                key={task.id || i} 
+                className={`${styles.taskItem} ${task.completed ? styles.taskDone : ""}`}
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleTaskMutation.mutate(task.id)}
+              >
                 <div className={`${styles.taskCheck} ${task.completed ? styles.taskChecked : ""}`} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {task.completed && (
                     <Check size={10} weight="bold" style={{ color: "white" }} />
@@ -256,6 +309,38 @@ export default function PatientDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Booking Modal */}
+      {showBookModal && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }} onClick={() => setShowBookModal(false)}>
+          <div style={{ background: "var(--bg-card)", borderRadius: 12, border: "1px solid var(--border-subtle)", padding: 24, width: "100%", maxWidth: 450, position: "relative", boxShadow: "var(--shadow-lg)" }} onClick={e => e.stopPropagation()}>
+            <button style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center" }} onClick={() => setShowBookModal(false)}>
+              <X size={20} />
+            </button>
+            <div style={{ marginBottom: 20 }}>
+              <h2 className="heading-md" style={{ marginBottom: 4 }}>Book Appointment</h2>
+              <p className="text-sm text-muted">Schedule a visit with your provider</p>
+            </div>
+            <BookingForm onSuccess={() => setShowBookModal(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* Profile Settings Modal */}
+      {showProfileModal && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }} onClick={() => setShowProfileModal(false)}>
+          <div style={{ background: "var(--bg-card)", borderRadius: 12, border: "1px solid var(--border-subtle)", padding: 24, width: "100%", maxWidth: 450, position: "relative", boxShadow: "var(--shadow-lg)" }} onClick={e => e.stopPropagation()}>
+            <button style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center" }} onClick={() => setShowProfileModal(false)}>
+              <X size={20} />
+            </button>
+            <div style={{ marginBottom: 20 }}>
+              <h2 className="heading-md" style={{ marginBottom: 4 }}>Profile Settings</h2>
+              <p className="text-sm text-muted">Update your personal and medical information</p>
+            </div>
+            <ProfileForm onSuccess={() => setShowProfileModal(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

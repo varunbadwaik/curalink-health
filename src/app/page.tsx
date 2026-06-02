@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import LoginForm from "@/components/forms/LoginForm";
 import styles from "./page.module.css";
 import {
   ArrowRight,
@@ -26,16 +27,6 @@ import {
 export default function LandingPage() {
   const [showLogin, setShowLogin] = useState(false);
   const [loginRole, setLoginRole] = useState<string>("patient");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Demo: route to role-based dashboard
-    if (loginRole === "patient") window.location.href = "/dashboard/patient";
-    else if (loginRole === "doctor") window.location.href = "/dashboard/doctor";
-    else window.location.href = "/dashboard/admin";
-  };
 
   return (
     <div className={styles.page}>
@@ -198,36 +189,11 @@ export default function LandingPage() {
             <button className={styles.modalClose} onClick={() => setShowLogin(false)}>
               <X size={20} />
             </button>
-            <div className={styles.modalHeader}>
+            <div className={styles.modalHeader} style={{ marginBottom: 16 }}>
               <h2 className="heading-md">Welcome Back</h2>
               <p className="text-sm text-muted">Sign in to your healthcare portal</p>
             </div>
-            <div className={styles.roleSelector}>
-              {["patient", "doctor", "admin"].map(role => (
-                <button key={role} className={`${styles.roleBtn} ${loginRole === role ? styles.roleBtnActive : ""}`} onClick={() => setLoginRole(role)}>
-                  <span style={{ marginRight: "6px", display: "inline-flex", alignItems: "center" }}>
-                    {role === "patient" ? <User size={16} weight="duotone" /> : role === "doctor" ? <Stethoscope size={16} weight="duotone" /> : <GearSix size={16} weight="duotone" />}
-                  </span>
-                  {role.charAt(0).toUpperCase() + role.slice(1)}
-                </button>
-              ))}
-            </div>
-            <form onSubmit={handleLogin} className={styles.loginForm}>
-              <div className={styles.inputGroup}>
-                <label className="text-sm">Email</label>
-                <input className="input" type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} />
-              </div>
-              <div className={styles.inputGroup}>
-                <label className="text-sm">Password</label>
-                <input className="input" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} />
-              </div>
-              <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "8px" }}>
-                Sign In as {loginRole.charAt(0).toUpperCase() + loginRole.slice(1)}
-              </button>
-              <p className="text-xs text-muted" style={{ textAlign: "center", marginTop: "12px" }}>
-                Demo mode — any credentials will work
-              </p>
-            </form>
+            <LoginForm onSuccess={() => setShowLogin(false)} initialRole={loginRole} />
           </div>
         </div>
       )}

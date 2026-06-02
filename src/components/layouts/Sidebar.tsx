@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import styles from "./Sidebar.module.css";
 import {
   ChartBar,
@@ -114,10 +115,10 @@ export default function Sidebar({ role }: { role: string }) {
             <span className={styles.userRole}>{roleLabel}</span>
           </div>
         </div>
-        <Link href="/" className={styles.logoutBtn}>
+        <button onClick={() => signOut({ callbackUrl: "/" })} className={styles.logoutBtn} style={{ background: "none", border: "none", width: "100%", textAlign: "left", cursor: "pointer" }}>
           <SignOut size={16} weight="bold" />
           Sign Out
-        </Link>
+        </button>
       </div>
     </aside>
   );

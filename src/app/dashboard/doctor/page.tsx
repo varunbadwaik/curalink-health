@@ -1,6 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import styles from "./page.module.css";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { mockApi } from "@/services/api";
+import dynamic from "next/dynamic";
+const DoctorWorkloadChart = dynamic(() => import("@/components/charts/DoctorCharts").then(m => m.DoctorWorkloadChart), { ssr: false });
 import {
   ChartBar,
   UsersThree,
@@ -12,39 +17,10 @@ import {
   CalendarDots
 } from "@phosphor-icons/react";
 
-const patientQueue = [
-  { id: "P-1042", name: "Maria Rodriguez", age: 67, condition: "Hypertension, T2 Diabetes", risk: 78, status: "waiting", waitTime: "12 min", avatar: "MR", aiFlag: "High BP trending" },
-  { id: "P-1038", name: "James Wilson", age: 45, condition: "Post-surgical follow-up", risk: 32, status: "in-progress", waitTime: "—", avatar: "JW", aiFlag: null },
-  { id: "P-1055", name: "Aisha Khan", age: 29, condition: "Prenatal care", risk: 15, status: "waiting", waitTime: "24 min", avatar: "AK", aiFlag: null },
-  { id: "P-1061", name: "Robert Chang", age: 72, condition: "CHF, COPD", risk: 91, status: "critical", waitTime: "URGENT", avatar: "RC", aiFlag: "SpO2 dropped to 89%" },
-  { id: "P-1044", name: "Elena Vasquez", age: 53, condition: "Rheumatoid arthritis", risk: 45, status: "waiting", waitTime: "35 min", avatar: "EV", aiFlag: "Lab results pending" },
-];
 
-const aiAlerts = [
-  { severity: "critical", patient: "Robert Chang", message: "SpO2 dropped to 89% — oxygen saturation below safe threshold. Immediate assessment recommended.", time: "2 min ago" },
-  { severity: "warning", patient: "Maria Rodriguez", message: "BP readings consistently >150/95 over past 3 days. Consider medication adjustment.", time: "15 min ago" },
-  { severity: "info", patient: "James Wilson", message: "Post-op day 5 — wound healing markers within normal range. Discharge criteria may be met.", time: "1 hr ago" },
-];
-
-const todaySchedule = [
-  { time: "9:00–9:30", patient: "Maria Rodriguez", type: "Follow-up", status: "completed" },
-  { time: "9:45–10:15", patient: "James Wilson", type: "Post-Op Check", status: "in-progress" },
-  { time: "10:30–11:00", patient: "Aisha Khan", type: "Prenatal", status: "upcoming" },
-  { time: "11:15–11:45", patient: "Robert Chang", type: "Urgent", status: "upcoming" },
-  { time: "1:00–1:30", patient: "Elena Vasquez", type: "Telehealth", status: "upcoming" },
-  { time: "2:00–2:30", patient: "John Smith", type: "Annual Physical", status: "upcoming" },
-];
-
-const performanceMetrics = [
-  { label: "Patients Today", value: "18", change: "+3", icon: <UsersThree size={24} weight="duotone" /> },
-  { label: "Avg Wait Time", value: "14m", change: "-2m", icon: <Timer size={24} weight="duotone" /> },
-  { label: "Care Plans Active", value: "42", change: "+5", icon: <ClipboardText size={24} weight="duotone" /> },
-  { label: "AI Alerts", value: "5", change: "+2", icon: <Brain size={24} weight="duotone" /> },
-];
-
-function getRiskColor(risk: number) {
-  if (risk >= 80) return "var(--critical)";
-  if (risk >= 50) return "var(--warning)";
+function getRiskColor(risk: number | string) {
+  if (risk === "high" || risk === 80 || (typeof risk === "number" && risk >= 80)) return "var(--critical)";
+  if (risk === "medium" || risk === 50 || (typeof risk === "number" && risk >= 50)) return "var(--warning)";
   return "var(--accent)";
 }
 
@@ -59,6 +35,57 @@ function getStatusBadge(status: string) {
 }
 
 export default function DoctorDashboard() {
+  const queryClient = useQueryClient();
+
+  const { data: queue = [] } = useQuery({
+    queryKey: ["queue"],
+    queryFn: mockApi.getQueue,
+  });
+
+  const { data: aiAlerts = [] } = useQuery({
+    queryKey: ["aiAlerts"],
+    queryFn: mockApi.getDoctorAlerts,
+  });
+
+  const { data: todaySchedule = [] } = useQuery({
+    queryKey: ["todaySchedule"],
+    queryFn: mockApi.getDoctorSchedule,
+  });
+
+  const { data: storeMetrics = [] } = useQuery({
+    queryKey: ["doctorMetrics"],
+    queryFn: mockApi.getDoctorMetrics,
+  });
+
+  const dismissAlertMutation = useMutation({
+    mutationFn: mockApi.dismissDoctorAlert,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["aiAlerts"] });
+    },
+  });
+
+  const updateScheduleMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: any }) => mockApi.updateDoctorScheduleStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todaySchedule"] });
+    },
+  });
+
+  // Map state/database metrics to icons dynamically
+  const iconMap: Record<string, React.ReactNode> = {
+    "Patients Today": <UsersThree size={24} weight="duotone" />,
+    "Avg Wait Time": <Timer size={24} weight="duotone" />,
+    "Care Plans Active": <ClipboardText size={24} weight="duotone" />,
+    "AI Alerts": <Brain size={24} weight="duotone" />,
+  };
+
+  const performanceMetrics = storeMetrics.map((m: any) => ({
+    label: m.label,
+    value: m.value,
+    change: m.change,
+    icon: iconMap[m.label] || <UsersThree size={24} weight="duotone" />,
+  }));
+
   return (
     <div className={styles.dashboard}>
       {/* Header */}
@@ -93,6 +120,14 @@ export default function DoctorDashboard() {
         ))}
       </div>
 
+      {/* Workload Trends Chart */}
+      <div className="card animate-fade-in" style={{ padding: 24, marginBottom: 24 }}>
+        <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: 16 }}>
+          <ChartBar size={20} weight="duotone" style={{ color: "var(--accent)" }} /> Provider Workload Trends
+        </h2>
+        <DoctorWorkloadChart />
+      </div>
+
       {/* Main Grid */}
       <div className={styles.mainGrid}>
         {/* AI Alerts — Top Priority */}
@@ -104,7 +139,7 @@ export default function DoctorDashboard() {
             <span className="badge badge-critical">{aiAlerts.length} Active</span>
           </div>
           <div className={styles.alertsList}>
-            {aiAlerts.map((alert, i) => (
+            {aiAlerts.map((alert: any, i: number) => (
               <div key={i} className={`${styles.alertCard} ${styles[`alert_${alert.severity}`]}`}>
                 <div className={styles.alertTop}>
                   <span className={`badge ${getStatusBadge(alert.severity === "critical" ? "critical" : alert.severity === "warning" ? "waiting" : "in-progress")}`}>
@@ -116,7 +151,12 @@ export default function DoctorDashboard() {
                 <p className={styles.alertMsg}>{alert.message}</p>
                 <div className={styles.alertActions}>
                   <button className="btn btn-primary btn-sm">Review Patient</button>
-                  <button className="btn btn-ghost btn-sm">Dismiss</button>
+                  <button 
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => dismissAlertMutation.mutate(alert.patient)}
+                  >
+                    Dismiss
+                  </button>
                 </div>
               </div>
             ))}
@@ -129,51 +169,57 @@ export default function DoctorDashboard() {
             <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
               <UsersThree size={20} weight="duotone" /> Patient Queue
             </h2>
-            <span className="badge badge-primary">{patientQueue.length} Patients</span>
+            <span className="badge badge-primary">{queue.length} Patients</span>
           </div>
           <div className={styles.queueList}>
-            {patientQueue.map((patient) => (
-              <div key={patient.id} className={`${styles.queueCard} ${patient.status === "critical" ? styles.queueCritical : ""}`}>
-                <div className={styles.queueAvatar} style={{ 
-                  background: `${getRiskColor(patient.risk)}15`, 
-                  color: getRiskColor(patient.risk) 
-                }}>
-                  {patient.avatar}
-                </div>
-                <div className={styles.queueInfo}>
-                  <div className={styles.queueNameRow}>
-                    <strong>{patient.name}</strong>
-                    <span className="text-xs text-muted">{patient.id}</span>
+            {queue.length === 0 ? (
+              <p style={{ padding: 24, textAlign: "center" }} className="text-sm text-muted">No patients in the queue.</p>
+            ) : (
+              queue.map((patient: any) => {
+                const avatar = patient.name.split(" ").map((n: string) => n[0]).slice(0, 2).join("");
+                const riskNumber = patient.risk === "high" ? 85 : patient.risk === "medium" ? 45 : 15;
+                const riskColor = getRiskColor(patient.risk);
+                return (
+                  <div key={patient.id} className={`${styles.queueCard} ${patient.status === "critical" ? styles.queueCritical : ""}`}>
+                    <div className={styles.queueAvatar} style={{ 
+                      background: `${riskColor}15`, 
+                      color: riskColor 
+                    }}>
+                      {avatar}
+                    </div>
+                    <div className={styles.queueInfo}>
+                      <div className={styles.queueNameRow}>
+                        <strong>{patient.name}</strong>
+                        <span className="text-xs text-muted">{patient.id}</span>
+                      </div>
+                      <span className="text-sm text-muted">{patient.reason}</span>
+                    </div>
+                    <div className={styles.queueMeta}>
+                      <div className={styles.riskGauge}>
+                        <svg width="40" height="40" viewBox="0 0 40 40">
+                          <circle cx="20" cy="20" r="16" fill="none" stroke="var(--bg-tertiary)" strokeWidth="3" />
+                          <circle cx="20" cy="20" r="16" fill="none" stroke={riskColor} strokeWidth="3"
+                            strokeDasharray={`${riskNumber} ${100 - riskNumber}`}
+                            strokeDashoffset="25" strokeLinecap="round"
+                            style={{ transition: "stroke-dasharray 1s ease" }}
+                          />
+                          <text x="20" y="24" textAnchor="middle" fill={riskColor} fontSize="10" fontWeight="700" fontFamily="var(--font-mono)">
+                            {patient.risk.toUpperCase().slice(0, 3)}
+                          </text>
+                        </svg>
+                      </div>
+                      <span className={`badge ${getStatusBadge(patient.status)}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                        {patient.status === "waiting" ? (
+                          <>
+                            <Hourglass size={12} /> {patient.time}
+                          </>
+                        ) : patient.status}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-sm text-muted">{patient.condition}</span>
-                  {patient.aiFlag && (
-                    <span className={styles.queueAiFlag} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                      <Brain size={12} weight="duotone" /> {patient.aiFlag}
-                    </span>
-                  )}
-                </div>
-                <div className={styles.queueMeta}>
-                  <div className={styles.riskGauge}>
-                    <svg width="40" height="40" viewBox="0 0 40 40">
-                      <circle cx="20" cy="20" r="16" fill="none" stroke="var(--bg-tertiary)" strokeWidth="3" />
-                      <circle cx="20" cy="20" r="16" fill="none" stroke={getRiskColor(patient.risk)} strokeWidth="3"
-                        strokeDasharray={`${patient.risk} ${100 - patient.risk}`}
-                        strokeDashoffset="25" strokeLinecap="round"
-                        style={{ transition: "stroke-dasharray 1s ease" }}
-                      />
-                      <text x="20" y="24" textAnchor="middle" fill={getRiskColor(patient.risk)} fontSize="10" fontWeight="700" fontFamily="var(--font-mono)">{patient.risk}</text>
-                    </svg>
-                  </div>
-                  <span className={`badge ${getStatusBadge(patient.status)}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                    {patient.status === "waiting" ? (
-                      <>
-                        <Hourglass size={12} /> {patient.waitTime}
-                      </>
-                    ) : patient.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -186,8 +232,16 @@ export default function DoctorDashboard() {
             <a href="/dashboard/doctor/schedule" className={styles.viewAll}>Full Calendar →</a>
           </div>
           <div className={styles.scheduleList}>
-            {todaySchedule.map((slot, i) => (
-              <div key={i} className={`${styles.scheduleItem} ${slot.status === "in-progress" ? styles.scheduleActive : ""} ${slot.status === "completed" ? styles.scheduleDone : ""}`}>
+            {todaySchedule.map((slot: any, i: number) => (
+              <div 
+                key={slot.id || i} 
+                className={`${styles.scheduleItem} ${slot.status === "in-progress" ? styles.scheduleActive : ""} ${slot.status === "completed" ? styles.scheduleDone : ""}`}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  const nextStatus = slot.status === "upcoming" ? "in-progress" : slot.status === "in-progress" ? "completed" : "upcoming";
+                  updateScheduleMutation.mutate({ id: slot.id, status: nextStatus });
+                }}
+              >
                 <div className={styles.scheduleTime}>
                   <span className="text-mono text-sm">{slot.time}</span>
                 </div>

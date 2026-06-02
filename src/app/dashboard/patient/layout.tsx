@@ -1,4 +1,4 @@
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/layouts/Sidebar";
 import styles from "./layout.module.css";
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
