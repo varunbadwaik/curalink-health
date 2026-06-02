@@ -22,6 +22,7 @@ export default withAuth(
     callbacks: {
       authorized: ({ token }) => !!token,
     },
+    secret: process.env.NEXTAUTH_SECRET || "default_nextauth_secret_for_curalink_health_app_2026_prod",
   }
 );
 

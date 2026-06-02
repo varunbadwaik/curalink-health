@@ -1,6 +1,8 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+console.log("DEBUG: auth.ts module loaded. NEXTAUTH_SECRET presence:", !!process.env.NEXTAUTH_SECRET);
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -11,6 +13,7 @@ export const authOptions: NextAuthOptions = {
         role: { label: "Role", type: "text" }
       },
       async authorize(credentials) {
+        console.log("Credentials received in authorize:", credentials);
         if (!credentials) return null;
         const { email, password, role } = credentials;
 
@@ -27,6 +30,7 @@ export const authOptions: NextAuthOptions = {
             return { id: "pat-1", name: "John Smith", email: "patient@curalink.health", role: "patient" };
           }
         }
+        console.log("Authentication failed for credentials:", email, role);
         return null;
       }
     })
