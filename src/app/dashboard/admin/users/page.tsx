@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { UsersThree } from "@phosphor-icons/react";
 
 const users = [
   { id: "USR-001", name: "Dr. Sarah Chen", role: "Physician", dept: "Cardiology", status: "Active", lastLog: "10 mins ago", email: "schen@curalink.health" },
@@ -18,7 +19,12 @@ export default function AdminUsersPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">👥 User Management</h1><p className="text-muted" style={{marginTop:4}}>Manage platform access and roles</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <UsersThree size={28} weight="duotone" /> User Management
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage platform access and roles</p>
+        </div>
         <button className="btn btn-primary">+ Add New User</button>
       </div>
       

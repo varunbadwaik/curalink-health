@@ -1,4 +1,6 @@
 "use client";
+import { CreditCard } from "@phosphor-icons/react";
+
 const invoices = [
   { id: "INV-2026-042", description: "Cardiology Consultation — Dr. Sarah Chen", date: "Apr 15, 2026", total: 250.00, insurance: 200.00, copay: 50.00, status: "paid" },
   { id: "INV-2026-038", description: "Lab Work — Comprehensive Blood Panel", date: "Apr 10, 2026", total: 450.00, insurance: 405.00, copay: 45.00, status: "paid" },
@@ -12,8 +14,15 @@ export default function BillingPage() {
   return (
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
-        <div><h1 className="heading-lg">💳 Billing & Insurance</h1><p className="text-muted" style={{marginTop:4}}>Manage your medical bills and insurance claims</p></div>
-        <button className="btn btn-primary btn-sm">💳 Make Payment</button>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <CreditCard size={28} weight="duotone" /> Billing & Insurance
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage your medical bills and insurance claims</p>
+        </div>
+        <button className="btn btn-primary btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+          <CreditCard size={16} /> Make Payment
+        </button>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:16,marginBottom:24}}>
         <div className="card" style={{padding:20,textAlign:"center"}}>

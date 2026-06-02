@@ -1,4 +1,6 @@
 "use client";
+import { Pill, Warning } from "@phosphor-icons/react";
+
 const meds = [
   { name: "Lisinopril", dosage: "10mg", frequency: "Once daily (morning)", prescriber: "Dr. Sarah Chen", refillDate: "May 1, 2026", adherence: 95, purpose: "Blood pressure management", sideEffects: "Dizziness, dry cough", interactions: "Avoid potassium supplements", pillsRemaining: 18, status: "active" },
   { name: "Metformin", dosage: "500mg", frequency: "Twice daily (with meals)", prescriber: "Dr. Mike Torres", refillDate: "Apr 28, 2026", adherence: 88, purpose: "Blood sugar control (Type 2 Diabetes)", sideEffects: "Nausea, stomach upset", interactions: "Limit alcohol", pillsRemaining: 12, status: "active" },
@@ -11,7 +13,12 @@ export default function MedicationsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">💊 Medications</h1><p className="text-muted" style={{marginTop:4}}>Current medications and prescription management</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Pill size={28} weight="duotone" /> Medications
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Current medications and prescription management</p>
+        </div>
         <button className="btn btn-primary btn-sm">Request Refill</button>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -36,7 +43,9 @@ export default function MedicationsPage() {
               <div><span className="text-xs text-muted">Refill by</span><br/>{med.refillDate} {med.pillsRemaining > 0 && <span className="badge badge-warning" style={{marginLeft:4}}>{med.pillsRemaining} pills left</span>}</div>
             </div>
             {med.interactions !== "None significant" && (
-              <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--warning-glow)", borderRadius: "var(--radius-md)", fontSize: "0.75rem", color: "var(--warning-light)" }}>⚠️ {med.interactions}</div>
+              <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--warning-glow)", borderRadius: "var(--radius-md)", fontSize: "0.75rem", color: "var(--warning-light)", display: "flex", alignItems: "center", gap: "6px" }}>
+                <Warning size={14} weight="duotone" /> {med.interactions}
+              </div>
             )}
           </div>
         ))}

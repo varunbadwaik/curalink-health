@@ -1,4 +1,5 @@
 "use client";
+import { Hospital } from "@phosphor-icons/react";
 
 const facilities = [
   { id: "FAC-MAIN", name: "UHX Main Campus", type: "Hospital", status: "Operational", capacity: "85%", beds: "340/400", staff: 120, location: "Downtown" },
@@ -11,7 +12,12 @@ export default function AdminFacilitiesPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">🏥 Facilities & Departments</h1><p className="text-muted" style={{marginTop:4}}>Monitor facility capacity and operational status</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Hospital size={28} weight="duotone" /> Facilities & Departments
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Monitor facility capacity and operational status</p>
+        </div>
         <button className="btn btn-primary">+ Add Facility</button>
       </div>
 

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { ChatCircleDots, Phone, VideoCamera, Paperclip } from "@phosphor-icons/react";
 
 const threads = [
   { id: 1, from: "Dr. Sarah Chen", role: "Cardiology", avatar: "SC", unread: 2, lastMsg: "Your latest blood pressure readings look improved. Let's discuss adjusting your medication at the next visit.", time: "10 min ago", online: true },
@@ -25,7 +26,9 @@ export default function MessagesPage() {
 
   return (
     <div>
-      <h1 className="heading-lg" style={{ marginBottom: 24 }}>💬 Messages</h1>
+      <h1 className="heading-lg" style={{ marginBottom: 24, display: "inline-flex", alignItems: "center", gap: "8px" }}>
+        <ChatCircleDots size={28} weight="duotone" /> Messages
+      </h1>
       <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 16, height: "calc(100vh - 160px)" }}>
         {/* Thread List */}
         <div className="card" style={{ overflow: "auto", padding: 0 }}>
@@ -55,8 +58,12 @@ export default function MessagesPage() {
             <div style={{ width: 36, height: 36, borderRadius: "var(--radius-md)", background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700, color: "var(--accent)" }}>{active.avatar}</div>
             <div><strong style={{ fontSize: "0.875rem" }}>{active.from}</strong><p className="text-xs text-muted" style={{margin:0}}>{active.role}</p></div>
             <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-              <button className="btn btn-ghost btn-sm">📞</button>
-              <button className="btn btn-ghost btn-sm">📹</button>
+              <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+                <Phone size={16} weight="duotone" />
+              </button>
+              <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+                <VideoCamera size={16} weight="duotone" />
+              </button>
             </div>
           </div>
           <div style={{ flex: 1, overflow: "auto", padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
@@ -70,7 +77,9 @@ export default function MessagesPage() {
             ))}
           </div>
           <div style={{ padding: "12px 20px", borderTop: "1px solid var(--border-subtle)", display: "flex", gap: 8 }}>
-            <button className="btn btn-ghost btn-sm">📎</button>
+            <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+              <Paperclip size={16} />
+            </button>
             <input className="input" placeholder="Type a message..." value={newMsg} onChange={e => setNewMsg(e.target.value)} style={{ flex: 1 }} />
             <button className="btn btn-primary btn-sm">Send</button>
           </div>

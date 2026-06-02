@@ -1,4 +1,6 @@
 "use client";
+import { Flask } from "@phosphor-icons/react";
+
 const orders = [
   { id: "LAB-0421", patient: "Maria Rodriguez", tests: ["CBC","BMP","HbA1c","Lipid Panel"], urgency: "routine", status: "completed", ordered: "Apr 10", result: "Apr 12" },
   { id: "LAB-0422", patient: "Robert Chang", tests: ["BNP","Troponin","CBC","CMP","ABG"], urgency: "stat", status: "pending", ordered: "Apr 17", result: "—" },
@@ -15,7 +17,12 @@ export default function DoctorLabsPage() {
   return (
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
-        <div><h1 className="heading-lg">🔬 Lab Orders</h1><p className="text-muted" style={{marginTop:4}}>Order, track, and review laboratory tests</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Flask size={28} weight="duotone" /> Lab Orders
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Order, track, and review laboratory tests</p>
+        </div>
         <button className="btn btn-primary">+ New Lab Order</button>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:12}}>

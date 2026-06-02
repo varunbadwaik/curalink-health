@@ -3,46 +3,68 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import styles from "./Sidebar.module.css";
+import {
+  ChartBar,
+  CalendarDots,
+  ChatCircleDots,
+  ClipboardText,
+  Pill,
+  Flask,
+  FolderOpen,
+  VideoCamera,
+  CreditCard,
+  Crosshair,
+  UsersThree,
+  Brain,
+  TrendUp,
+  Hospital,
+  GearSix,
+  ShieldCheck,
+  CurrencyDollar,
+  LinkSimple,
+  FileText,
+  SignOut
+} from "@phosphor-icons/react";
 
 interface NavItem {
   label: string;
   href: string;
-  icon: string;
+  icon: React.ReactNode;
   badge?: string;
 }
 
 const roleNavs: Record<string, NavItem[]> = {
   patient: [
-    { label: "Dashboard", href: "/dashboard/patient", icon: "📊" },
-    { label: "Appointments", href: "/dashboard/patient/appointments", icon: "📅" },
-    { label: "Messages", href: "/dashboard/patient/messages", icon: "💬", badge: "3" },
-    { label: "Care Plans", href: "/dashboard/patient/care-plans", icon: "📋" },
-    { label: "Medications", href: "/dashboard/patient/medications", icon: "💊" },
-    { label: "Lab Results", href: "/dashboard/patient/labs", icon: "🔬" },
-    { label: "Documents", href: "/dashboard/patient/documents", icon: "📁" },
-    { label: "Telehealth", href: "/dashboard/patient/telehealth", icon: "📹" },
-    { label: "Billing", href: "/dashboard/patient/billing", icon: "💳" },
+    { label: "Dashboard", href: "/dashboard/patient", icon: <ChartBar size={20} weight="duotone" /> },
+    { label: "Appointments", href: "/dashboard/patient/appointments", icon: <CalendarDots size={20} weight="duotone" /> },
+    { label: "Messages", href: "/dashboard/patient/messages", icon: <ChatCircleDots size={20} weight="duotone" />, badge: "3" },
+    { label: "Care Plans", href: "/dashboard/patient/care-plans", icon: <ClipboardText size={20} weight="duotone" /> },
+    { label: "Medications", href: "/dashboard/patient/medications", icon: <Pill size={20} weight="duotone" /> },
+    { label: "Lab Results", href: "/dashboard/patient/labs", icon: <Flask size={20} weight="duotone" /> },
+    { label: "Documents", href: "/dashboard/patient/documents", icon: <FolderOpen size={20} weight="duotone" /> },
+    { label: "Telehealth", href: "/dashboard/patient/telehealth", icon: <VideoCamera size={20} weight="duotone" /> },
+    { label: "Billing", href: "/dashboard/patient/billing", icon: <CreditCard size={20} weight="duotone" /> },
   ],
   doctor: [
-    { label: "Command Center", href: "/dashboard/doctor", icon: "🎯" },
-    { label: "Patient Queue", href: "/dashboard/doctor/queue", icon: "👥", badge: "12" },
-    { label: "Schedule", href: "/dashboard/doctor/schedule", icon: "📅" },
-    { label: "Care Plans", href: "/dashboard/doctor/care-plans", icon: "📋" },
-    { label: "AI Insights", href: "/dashboard/doctor/ai-insights", icon: "🧠", badge: "5" },
-    { label: "Prescriptions", href: "/dashboard/doctor/prescriptions", icon: "💊" },
-    { label: "Lab Orders", href: "/dashboard/doctor/labs", icon: "🔬" },
-    { label: "Team Chat", href: "/dashboard/doctor/chat", icon: "💬" },
-    { label: "Analytics", href: "/dashboard/doctor/analytics", icon: "📈" },
+    { label: "Command Center", href: "/dashboard/doctor", icon: <Crosshair size={20} weight="duotone" /> },
+    { label: "Patient Queue", href: "/dashboard/doctor/queue", icon: <UsersThree size={20} weight="duotone" />, badge: "12" },
+    { label: "Schedule", href: "/dashboard/doctor/schedule", icon: <CalendarDots size={20} weight="duotone" /> },
+    { label: "Care Plans", href: "/dashboard/doctor/care-plans", icon: <ClipboardText size={20} weight="duotone" /> },
+    { label: "AI Insights", href: "/dashboard/doctor/ai-insights", icon: <Brain size={20} weight="duotone" />, badge: "5" },
+    { label: "Prescriptions", href: "/dashboard/doctor/prescriptions", icon: <Pill size={20} weight="duotone" /> },
+    { label: "Lab Orders", href: "/dashboard/doctor/labs", icon: <Flask size={20} weight="duotone" /> },
+    { label: "Team Chat", href: "/dashboard/doctor/chat", icon: <ChatCircleDots size={20} weight="duotone" /> },
+    { label: "Analytics", href: "/dashboard/doctor/analytics", icon: <TrendUp size={20} weight="duotone" /> },
   ],
   admin: [
-    { label: "Dashboard", href: "/dashboard/admin", icon: "📊" },
-    { label: "Users", href: "/dashboard/admin/users", icon: "👥" },
-    { label: "Facilities", href: "/dashboard/admin/facilities", icon: "🏥" },
-    { label: "Workflows", href: "/dashboard/admin/workflows", icon: "⚙️" },
-    { label: "Compliance", href: "/dashboard/admin/compliance", icon: "🛡️", badge: "2" },
-    { label: "Finance", href: "/dashboard/admin/finance", icon: "💰" },
-    { label: "Integrations", href: "/dashboard/admin/integrations", icon: "🔗" },
-    { label: "Reports", href: "/dashboard/admin/reports", icon: "📑" },
+    { label: "Dashboard", href: "/dashboard/admin", icon: <ChartBar size={20} weight="duotone" /> },
+    { label: "Users", href: "/dashboard/admin/users", icon: <UsersThree size={20} weight="duotone" /> },
+    { label: "Facilities", href: "/dashboard/admin/facilities", icon: <Hospital size={20} weight="duotone" /> },
+    { label: "Workflows", href: "/dashboard/admin/workflows", icon: <GearSix size={20} weight="duotone" /> },
+    { label: "Compliance", href: "/dashboard/admin/compliance", icon: <ShieldCheck size={20} weight="duotone" />, badge: "2" },
+    { label: "Finance", href: "/dashboard/admin/finance", icon: <CurrencyDollar size={20} weight="duotone" /> },
+    { label: "Integrations", href: "/dashboard/admin/integrations", icon: <LinkSimple size={20} weight="duotone" /> },
+    { label: "Reports", href: "/dashboard/admin/reports", icon: <FileText size={20} weight="duotone" /> },
   ],
 };
 
@@ -58,7 +80,6 @@ export default function Sidebar({ role }: { role: string }) {
       {/* Logo */}
       <div className={styles.logoSection}>
         <Link href="/" className={styles.logo}>
-
           <span className={styles.logoText}>Curalink</span>
         </Link>
         <div className={styles.roleBadge} style={{ background: `${roleColor}15`, color: roleColor, borderColor: `${roleColor}30` }}>
@@ -94,7 +115,7 @@ export default function Sidebar({ role }: { role: string }) {
           </div>
         </div>
         <Link href="/" className={styles.logoutBtn}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <SignOut size={16} weight="bold" />
           Sign Out
         </Link>
       </div>

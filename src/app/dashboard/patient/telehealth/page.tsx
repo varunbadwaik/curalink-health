@@ -1,8 +1,12 @@
 "use client";
+import { VideoCamera, Camera } from "@phosphor-icons/react";
+
 export default function TelehealthPage() {
   return (
     <div>
-      <h1 className="heading-lg" style={{marginBottom:24}}>📹 Telehealth</h1>
+      <h1 className="heading-lg" style={{marginBottom:24, display: "inline-flex", alignItems: "center", gap: "8px"}}>
+        <VideoCamera size={28} weight="duotone" /> Telehealth
+      </h1>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:24}}>
         <div className="card" style={{padding:24}}>
           <h2 className="heading-md" style={{marginBottom:8}}>Next Virtual Visit</h2>
@@ -14,7 +18,9 @@ export default function TelehealthPage() {
             </div>
             <div><strong>April 25, 2026</strong><br/><span className="text-sm text-muted">2:30 PM EST</span></div>
           </div>
-          <button className="btn btn-primary" style={{width:"100%"}}>🎥 Join Video Call</button>
+          <button className="btn btn-primary" style={{width:"100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px"}}>
+            <Camera size={16} weight="duotone" /> Join Video Call
+          </button>
         </div>
         <div className="card" style={{padding:24}}>
           <h2 className="heading-md" style={{marginBottom:8}}>Pre-Visit Checklist</h2>
@@ -29,7 +35,9 @@ export default function TelehealthPage() {
       <div style={{display:"flex",flexDirection:"column",gap:8}}>
         {[{doctor:"Dr. Sarah Chen",date:"Apr 5, 2026",duration:"22 min",summary:"Reviewed BP trends. Medication dosage maintained."},{doctor:"Dr. Mike Torres",date:"Mar 20, 2026",duration:"18 min",summary:"Diabetes management check. HbA1c improving."},{doctor:"Dr. Priya Patel",date:"Feb 28, 2026",duration:"15 min",summary:"Skin condition follow-up. Cleared for next quarterly."}].map((v,i) => (
           <div key={i} className="card" style={{padding:16,display:"flex",alignItems:"center",gap:16}}>
-            <div style={{width:40,height:40,borderRadius:"var(--radius-md)",background:"var(--bg-tertiary)",display:"flex",alignItems:"center",justifyContent:"center"}}>📹</div>
+            <div style={{width:40,height:40,borderRadius:"var(--radius-md)",background:"var(--bg-tertiary)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <VideoCamera size={20} weight="duotone" style={{ color: "var(--primary)" }} />
+            </div>
             <div style={{flex:1}}><strong className="text-sm">{v.doctor}</strong><br/><span className="text-xs text-muted">{v.date} · {v.duration}</span></div>
             <span className="text-sm text-muted" style={{maxWidth:300}}>{v.summary}</span>
             <button className="btn btn-ghost btn-sm">View Notes</button>

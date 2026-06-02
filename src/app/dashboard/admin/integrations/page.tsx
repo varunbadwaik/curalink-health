@@ -1,4 +1,5 @@
 "use client";
+import { Plug } from "@phosphor-icons/react";
 
 const integrations = [
   { name: "Epic Systems EHR", type: "Health Records", status: "Connected", health: "100%", latency: "42ms", lastSync: "1 min ago" },
@@ -13,7 +14,12 @@ export default function AdminIntegrationsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">🔌 System Integrations</h1><p className="text-muted" style={{marginTop:4}}>Manage external APIs and EHR connections</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Plug size={28} weight="duotone" /> System Integrations
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage external APIs and EHR connections</p>
+        </div>
         <button className="btn btn-primary">+ Add Integration</button>
       </div>
 

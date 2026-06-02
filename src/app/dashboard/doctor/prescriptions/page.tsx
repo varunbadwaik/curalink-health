@@ -1,4 +1,6 @@
 "use client";
+import { Pill, PencilSimple, ArrowsClockwise } from "@phosphor-icons/react";
+
 const prescriptions = [
   { id: "RX-20260415-01", patient: "Maria Rodriguez", medication: "Lisinopril 20mg", dosage: "Once daily", duration: "90 days", status: "active", date: "Apr 15, 2026", refills: 3, pharmacy: "CVS - Main St" },
   { id: "RX-20260415-02", patient: "Maria Rodriguez", medication: "Metformin 1000mg", dosage: "Twice daily", duration: "90 days", status: "active", date: "Apr 15, 2026", refills: 3, pharmacy: "CVS - Main St" },
@@ -14,7 +16,12 @@ export default function PrescriptionsPage() {
   return (
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
-        <div><h1 className="heading-lg">💊 Prescriptions</h1><p className="text-muted" style={{marginTop:4}}>Manage and e-prescribe medications</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Pill size={28} weight="duotone" /> Prescriptions
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage and e-prescribe medications</p>
+        </div>
         <button className="btn btn-primary">+ New Prescription</button>
       </div>
       <div className="card" style={{padding:0,overflow:"hidden"}}>
@@ -30,8 +37,12 @@ export default function PrescriptionsPage() {
             <span className="text-mono text-sm">{rx.refills}</span>
             <span className={`badge ${statusBadge[rx.status] || "badge-primary"}`}>{rx.status.replace("-"," ")}</span>
             <div style={{display:"flex",gap:4}}>
-              <button className="btn btn-ghost btn-sm" title="Edit">✏️</button>
-              <button className="btn btn-ghost btn-sm" title="Renew">🔄</button>
+              <button className="btn btn-ghost btn-sm" title="Edit" style={{ display: "inline-flex", alignItems: "center" }}>
+                <PencilSimple size={16} />
+              </button>
+              <button className="btn btn-ghost btn-sm" title="Renew" style={{ display: "inline-flex", alignItems: "center" }}>
+                <ArrowsClockwise size={16} />
+              </button>
             </div>
           </div>
         ))}

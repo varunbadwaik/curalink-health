@@ -1,4 +1,6 @@
 "use client";
+import { ClipboardText, Crosshair } from "@phosphor-icons/react";
+
 const plans = [
   { id: 1, patient: "Maria Rodriguez", condition: "Hypertension, T2 Diabetes", status: "active", progress: 68, lastUpdated: "Apr 15, 2026", tasks: 12, completedTasks: 8, nextMilestone: "BP < 130/80 for 2 weeks" },
   { id: 2, patient: "Robert Chang", condition: "CHF, COPD", status: "critical", progress: 35, lastUpdated: "Apr 17, 2026", tasks: 15, completedTasks: 5, nextMilestone: "SpO2 stable > 93%" },
@@ -11,7 +13,12 @@ export default function DoctorCarePlansPage() {
   return (
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
-        <div><h1 className="heading-lg">📋 Care Plans</h1><p className="text-muted" style={{marginTop:4}}>Manage and monitor patient care plans</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <ClipboardText size={28} weight="duotone" /> Care Plans
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage and monitor patient care plans</p>
+        </div>
         <button className="btn btn-primary">+ Create Care Plan</button>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:12}}>
@@ -24,7 +31,9 @@ export default function DoctorCarePlansPage() {
                   <span className={`badge ${p.status==="critical"?"badge-critical":"badge-accent"}`}>{p.status}</span>
                 </div>
                 <span className="text-sm text-muted">{p.condition} · Updated {p.lastUpdated}</span>
-                <div style={{marginTop:4,fontSize:"0.75rem",color:"var(--primary)"}}>🎯 Next: {p.nextMilestone}</div>
+                <div style={{marginTop:4,fontSize:"0.75rem",color:"var(--primary)", display: "inline-flex", alignItems: "center", gap: "4px"}}>
+                  <Crosshair size={14} weight="duotone" /> Next: {p.nextMilestone}
+                </div>
               </div>
               <div style={{textAlign:"center",minWidth:80}}>
                 <div style={{fontSize:"1.5rem",fontWeight:800,fontFamily:"var(--font-mono)",color:p.progress>=70?"var(--accent)":p.progress>=40?"var(--warning)":"var(--critical)"}}>{p.progress}%</div>

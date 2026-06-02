@@ -1,6 +1,16 @@
 "use client";
 
 import styles from "./page.module.css";
+import {
+  ChartBar,
+  UsersThree,
+  Timer,
+  ClipboardText,
+  Brain,
+  Siren,
+  Hourglass,
+  CalendarDots
+} from "@phosphor-icons/react";
 
 const patientQueue = [
   { id: "P-1042", name: "Maria Rodriguez", age: 67, condition: "Hypertension, T2 Diabetes", risk: 78, status: "waiting", waitTime: "12 min", avatar: "MR", aiFlag: "High BP trending" },
@@ -26,10 +36,10 @@ const todaySchedule = [
 ];
 
 const performanceMetrics = [
-  { label: "Patients Today", value: "18", change: "+3", icon: "👥" },
-  { label: "Avg Wait Time", value: "14m", change: "-2m", icon: "⏱️" },
-  { label: "Care Plans Active", value: "42", change: "+5", icon: "📋" },
-  { label: "AI Alerts", value: "5", change: "+2", icon: "🧠" },
+  { label: "Patients Today", value: "18", change: "+3", icon: <UsersThree size={24} weight="duotone" /> },
+  { label: "Avg Wait Time", value: "14m", change: "-2m", icon: <Timer size={24} weight="duotone" /> },
+  { label: "Care Plans Active", value: "42", change: "+5", icon: <ClipboardText size={24} weight="duotone" /> },
+  { label: "AI Alerts", value: "5", change: "+2", icon: <Brain size={24} weight="duotone" /> },
 ];
 
 function getRiskColor(risk: number) {
@@ -58,8 +68,8 @@ export default function DoctorDashboard() {
           <p className={styles.subtitle}>Dr. Sarah Chen · Cardiology · April 18, 2026</p>
         </div>
         <div className={styles.headerActions}>
-          <button className="btn btn-ghost btn-sm">
-            📊 Analytics
+          <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+            <ChartBar size={16} /> Analytics
           </button>
           <button className="btn btn-primary btn-sm">
             + New Patient
@@ -88,7 +98,9 @@ export default function DoctorDashboard() {
         {/* AI Alerts — Top Priority */}
         <div className={`${styles.section} ${styles.alertsSection} animate-fade-in stagger-1`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">🚨 AI Decision Support Alerts</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <Siren size={20} weight="duotone" /> AI Decision Support Alerts
+            </h2>
             <span className="badge badge-critical">{aiAlerts.length} Active</span>
           </div>
           <div className={styles.alertsList}>
@@ -114,7 +126,9 @@ export default function DoctorDashboard() {
         {/* Patient Queue */}
         <div className={`${styles.section} animate-fade-in stagger-2`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">👥 Patient Queue</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <UsersThree size={20} weight="duotone" /> Patient Queue
+            </h2>
             <span className="badge badge-primary">{patientQueue.length} Patients</span>
           </div>
           <div className={styles.queueList}>
@@ -133,7 +147,9 @@ export default function DoctorDashboard() {
                   </div>
                   <span className="text-sm text-muted">{patient.condition}</span>
                   {patient.aiFlag && (
-                    <span className={styles.queueAiFlag}>🧠 {patient.aiFlag}</span>
+                    <span className={styles.queueAiFlag} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                      <Brain size={12} weight="duotone" /> {patient.aiFlag}
+                    </span>
                   )}
                 </div>
                 <div className={styles.queueMeta}>
@@ -148,8 +164,12 @@ export default function DoctorDashboard() {
                       <text x="20" y="24" textAnchor="middle" fill={getRiskColor(patient.risk)} fontSize="10" fontWeight="700" fontFamily="var(--font-mono)">{patient.risk}</text>
                     </svg>
                   </div>
-                  <span className={`badge ${getStatusBadge(patient.status)}`}>
-                    {patient.status === "waiting" ? `⏳ ${patient.waitTime}` : patient.status}
+                  <span className={`badge ${getStatusBadge(patient.status)}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                    {patient.status === "waiting" ? (
+                      <>
+                        <Hourglass size={12} /> {patient.waitTime}
+                      </>
+                    ) : patient.status}
                   </span>
                 </div>
               </div>
@@ -160,7 +180,9 @@ export default function DoctorDashboard() {
         {/* Today's Schedule */}
         <div className={`${styles.section} animate-fade-in stagger-3`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">📅 Today&apos;s Schedule</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <CalendarDots size={20} weight="duotone" /> Today&apos;s Schedule
+            </h2>
             <a href="/dashboard/doctor/schedule" className={styles.viewAll}>Full Calendar →</a>
           </div>
           <div className={styles.scheduleList}>

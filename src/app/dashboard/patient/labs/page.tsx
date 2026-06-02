@@ -1,4 +1,6 @@
 "use client";
+import { Flask } from "@phosphor-icons/react";
+
 const labs = [
   { test: "HbA1c", value: "6.8%", ref: "< 7.0%", status: "normal", date: "Apr 10, 2026", trend: [7.5, 7.2, 7.0, 6.8], provider: "Dr. Mike Torres" },
   { test: "Total Cholesterol", value: "195 mg/dL", ref: "< 200 mg/dL", status: "normal", date: "Apr 10, 2026", trend: [220, 210, 202, 195], provider: "Dr. Sarah Chen" },
@@ -14,7 +16,12 @@ export default function LabsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">🔬 Lab Results</h1><p className="text-muted" style={{marginTop:4}}>View and track your laboratory test results</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Flask size={28} weight="duotone" /> Lab Results
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>View and track your laboratory test results</p>
+        </div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 16 }}>
         {labs.map((lab, i) => (

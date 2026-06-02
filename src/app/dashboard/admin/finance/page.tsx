@@ -1,4 +1,5 @@
 "use client";
+import { CurrencyDollar } from "@phosphor-icons/react";
 
 const data = [
   { label: "Total Revenue (MTD)", value: "$4.2M", diff: "+8.4%", diffType: "up" },
@@ -18,7 +19,12 @@ export default function AdminFinancePage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">💳 Finance & Billing</h1><p className="text-muted" style={{marginTop:4}}>Revenue cycle management and claims processing</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <CurrencyDollar size={28} weight="duotone" /> Finance & Billing
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Revenue cycle management and claims processing</p>
+        </div>
         <select className="input" style={{ width: 150 }}><option>April 2026</option><option>March 2026</option></select>
       </div>
 

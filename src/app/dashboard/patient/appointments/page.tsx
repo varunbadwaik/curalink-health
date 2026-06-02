@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { CalendarDots, VideoCamera, Hospital } from "@phosphor-icons/react";
 
 const appointments = [
   { id: 1, doctor: "Dr. Sarah Chen", specialty: "Cardiology", date: "2026-04-22", time: "10:00 AM", type: "In-Person", status: "confirmed", location: "Building A, Room 204", notes: "Follow-up for hypertension management" },
@@ -19,7 +20,12 @@ export default function AppointmentsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
-        <div><h1 className="heading-lg">📅 Appointments</h1><p className="text-muted" style={{marginTop:4}}>Manage your upcoming and past appointments</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <CalendarDots size={28} weight="duotone" /> Appointments
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage your upcoming and past appointments</p>
+        </div>
         <button className="btn btn-primary">+ Book New Appointment</button>
       </div>
       <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
@@ -42,7 +48,10 @@ export default function AppointmentsPage() {
               <span className="text-xs text-muted">{apt.location}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end" }}>
-              <span className={`badge ${apt.type === "Telehealth" ? "badge-primary" : "badge-accent"}`}>{apt.type === "Telehealth" ? "📹" : "🏥"} {apt.type}</span>
+              <span className={`badge ${apt.type === "Telehealth" ? "badge-primary" : "badge-accent"}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                {apt.type === "Telehealth" ? <VideoCamera size={14} weight="duotone" /> : <Hospital size={14} weight="duotone" />}
+                {apt.type}
+              </span>
               <span className={`badge ${statusColors[apt.status]}`}>{apt.status}</span>
             </div>
             {apt.status === "scheduled" || apt.status === "confirmed" ? (

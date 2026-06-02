@@ -1,4 +1,5 @@
 "use client";
+import { ChartBar, FileText } from "@phosphor-icons/react";
 
 const reports = [
   { name: "Monthly Organizational Performance", desc: "Aggregated KPIs for all facilities", format: "PDF, Excel", schedule: "Monthly (1st)" },
@@ -12,7 +13,12 @@ export default function AdminReportsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">📊 Data & Reports</h1><p className="text-muted" style={{marginTop:4}}>Generate, schedule, and export platform analytics</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <ChartBar size={28} weight="duotone" /> Data & Reports
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Generate, schedule, and export platform analytics</p>
+        </div>
         <button className="btn btn-primary">+ Build Custom Report</button>
       </div>
 
@@ -43,7 +49,9 @@ export default function AdminReportsPage() {
           <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <span style={{ fontSize: "1.2rem" }}>📄</span>
+                <span style={{ display: "inline-flex", alignItems: "center" }}>
+                  <FileText size={18} weight="duotone" />
+                </span>
                 <strong>{r.name}</strong>
                 <span className="badge badge-primary">{r.schedule}</span>
               </div>

@@ -1,4 +1,5 @@
 "use client";
+import { GearSix, Brain } from "@phosphor-icons/react";
 
 const workflows = [
   { id: "WF-01", name: "AI Intake Triage", trigger: "Patient Arrival", aiAgent: "Intake Agent v2", status: "Active", runs: "1,240/day", success: "99.2%" },
@@ -11,7 +12,12 @@ export default function AdminWorkflowsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">⚙️ Automated Workflows</h1><p className="text-muted" style={{marginTop:4}}>Manage AI agents and system automations</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <GearSix size={28} weight="duotone" /> Automated Workflows
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Manage AI agents and system automations</p>
+        </div>
         <button className="btn btn-primary">+ Create Workflow</button>
       </div>
 
@@ -35,7 +41,7 @@ export default function AdminWorkflowsPage() {
                 <td style={{ padding: "14px 20px" }}><span className="text-sm">{w.trigger}</span></td>
                 <td style={{ padding: "14px 20px" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.8125rem", background: "var(--primary-glow)", color: "var(--primary-light)", padding: "4px 8px", borderRadius: 4 }}>
-                    🧠 {w.aiAgent}
+                    <Brain size={14} weight="duotone" /> {w.aiAgent}
                   </span>
                 </td>
                 <td style={{ padding: "14px 20px" }}><span className="text-sm text-mono">{w.runs}</span></td>

@@ -1,14 +1,28 @@
 "use client";
 
 import styles from "./page.module.css";
+import {
+  FileText,
+  GearSix,
+  UsersThree,
+  Stethoscope,
+  CalendarDots,
+  CurrencyDollar,
+  Hospital,
+  Timer,
+  Monitor,
+  ShieldCheck,
+  Check,
+  ChartBar
+} from "@phosphor-icons/react";
 
 const orgMetrics = [
-  { label: "Total Patients", value: "12,847", change: "+342", trend: "up", icon: "👥", color: "var(--primary)" },
-  { label: "Active Providers", value: "186", change: "+8", trend: "up", icon: "🩺", color: "var(--accent)" },
-  { label: "Appointments Today", value: "847", change: "+12%", trend: "up", icon: "📅", color: "var(--purple)" },
-  { label: "Revenue (MTD)", value: "$2.4M", change: "+18%", trend: "up", icon: "💰", color: "var(--warning)" },
-  { label: "Bed Occupancy", value: "87%", change: "+3%", trend: "up", icon: "🏥", color: "var(--critical)" },
-  { label: "Avg Wait Time", value: "14 min", change: "-2 min", trend: "down", icon: "⏱️", color: "var(--accent)" },
+  { label: "Total Patients", value: "12,847", change: "+342", trend: "up", icon: <UsersThree size={24} weight="duotone" />, color: "var(--primary)" },
+  { label: "Active Providers", value: "186", change: "+8", trend: "up", icon: <Stethoscope size={24} weight="duotone" />, color: "var(--accent)" },
+  { label: "Appointments Today", value: "847", change: "+12%", trend: "up", icon: <CalendarDots size={24} weight="duotone" />, color: "var(--purple)" },
+  { label: "Revenue (MTD)", value: "$2.4M", change: "+18%", trend: "up", icon: <CurrencyDollar size={24} weight="duotone" />, color: "var(--warning)" },
+  { label: "Bed Occupancy", value: "87%", change: "+3%", trend: "up", icon: <Hospital size={24} weight="duotone" />, color: "var(--critical)" },
+  { label: "Avg Wait Time", value: "14 min", change: "-2 min", trend: "down", icon: <Timer size={24} weight="duotone" />, color: "var(--accent)" },
 ];
 
 const systemHealth = [
@@ -62,8 +76,12 @@ export default function AdminDashboard() {
           <p className={styles.subtitle}>Curalink Health System · Last updated: just now</p>
         </div>
         <div className={styles.headerActions}>
-          <button className="btn btn-ghost btn-sm">📑 Export Report</button>
-          <button className="btn btn-primary btn-sm">⚙️ Settings</button>
+          <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+            <FileText size={16} /> Export Report
+          </button>
+          <button className="btn btn-primary btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+            <GearSix size={16} /> Settings
+          </button>
         </div>
       </header>
 
@@ -88,7 +106,9 @@ export default function AdminDashboard() {
         {/* System Health */}
         <div className={`${styles.section} animate-fade-in stagger-1`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">🖥️ System Health</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <Monitor size={20} weight="duotone" /> System Health
+            </h2>
             <span className="badge badge-accent">All Systems</span>
           </div>
           <div className={styles.healthList}>
@@ -113,15 +133,17 @@ export default function AdminDashboard() {
         {/* Compliance */}
         <div className={`${styles.section} animate-fade-in stagger-2`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">🛡️ Compliance & Audits</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <ShieldCheck size={20} weight="duotone" /> Compliance & Audits
+            </h2>
             <span className="badge badge-warning">2 Pending</span>
           </div>
           <div className={styles.complianceList}>
             {complianceItems.map((item, i) => (
               <div key={i} className={styles.complianceItem}>
-                <div className={`${styles.complianceCheck} ${item.status === "completed" ? styles.complianceChecked : ""}`}>
+                <div className={`${styles.complianceCheck} ${item.status === "completed" ? styles.complianceChecked : ""}`} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {item.status === "completed" && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20,6 9,17 4,12"/></svg>
+                    <Check size={10} weight="bold" style={{ color: "white" }} />
                   )}
                 </div>
                 <div className={styles.complianceInfo}>
@@ -139,7 +161,9 @@ export default function AdminDashboard() {
         {/* Department Performance */}
         <div className={`${styles.section} ${styles.sectionWide} animate-fade-in stagger-3`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">📊 Department Performance</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <ChartBar size={20} weight="duotone" /> Department Performance
+            </h2>
           </div>
           <div className={styles.deptTable}>
             <div className={styles.deptHeader}>
@@ -174,7 +198,9 @@ export default function AdminDashboard() {
         {/* Recent Users */}
         <div className={`${styles.section} ${styles.sectionWide} animate-fade-in stagger-4`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">👥 Recent User Activity</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <UsersThree size={20} weight="duotone" /> Recent User Activity
+            </h2>
             <a href="/dashboard/admin/users" className={styles.viewAll}>Manage Users →</a>
           </div>
           <div className={styles.userList}>

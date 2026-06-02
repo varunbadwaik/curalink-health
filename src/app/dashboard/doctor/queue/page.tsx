@@ -1,4 +1,6 @@
 "use client";
+import { UsersThree, Warning, Brain, Hourglass } from "@phosphor-icons/react";
+
 const queue = [
   { id: "P-1061", name: "Robert Chang", age: 72, condition: "CHF, COPD", risk: 91, status: "critical", waitTime: "URGENT", aiFlag: "SpO2 dropped to 89%", vitals: "HR 102 | BP 95/58 | SpO2 89%", avatar: "RC" },
   { id: "P-1042", name: "Maria Rodriguez", age: 67, condition: "Hypertension, T2 Diabetes", risk: 78, status: "waiting", waitTime: "12 min", aiFlag: "High BP trending", vitals: "HR 88 | BP 152/96 | SpO2 97%", avatar: "MR" },
@@ -15,7 +17,12 @@ export default function QueuePage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">👥 Patient Queue</h1><p className="text-muted" style={{marginTop:4}}>Real-time patient queue with AI-driven risk prioritization</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <UsersThree size={28} weight="duotone" /> Patient Queue
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Real-time patient queue with AI-driven risk prioritization</p>
+        </div>
         <div style={{ display: "flex", gap: 8 }}><span className="badge badge-critical">1 Critical</span><span className="badge badge-warning">4 Waiting</span><span className="badge badge-primary">1 In-Progress</span></div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -26,10 +33,18 @@ export default function QueuePage() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
                   <strong>{p.name}</strong><span className="text-xs text-muted">{p.id} · Age {p.age}</span>
-                  {p.status === "critical" && <span className="badge badge-critical" style={{animation:"pulse 2s infinite"}}>⚠️ CRITICAL</span>}
+                  {p.status === "critical" && (
+                    <span className="badge badge-critical" style={{animation:"pulse 2s infinite", display: "inline-flex", alignItems: "center", gap: "4px"}}>
+                      <Warning size={12} weight="bold" /> CRITICAL
+                    </span>
+                  )}
                 </div>
                 <span className="text-sm text-muted">{p.condition}</span>
-                {p.aiFlag && <div style={{ fontSize: "0.75rem", color: "var(--warning)", marginTop: 2 }}>🧠 AI: {p.aiFlag}</div>}
+                {p.aiFlag && (
+                  <div style={{ fontSize: "0.75rem", color: "var(--warning)", marginTop: 2, display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                    <Brain size={14} weight="duotone" /> AI: {p.aiFlag}
+                  </div>
+                )}
               </div>
               <div style={{ textAlign: "right", minWidth: 200 }}>
                 <div className="text-mono text-xs text-muted" style={{ marginBottom: 4 }}>{p.vitals}</div>
@@ -39,7 +54,13 @@ export default function QueuePage() {
                     <div className="text-xs text-muted">Risk</div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <span className={`badge ${p.status === "critical" ? "badge-critical" : p.status === "in-progress" ? "badge-primary" : "badge-warning"}`}>{p.status === "waiting" ? `⏳ ${p.waitTime}` : p.status}</span>
+                    <span className={`badge ${p.status === "critical" ? "badge-critical" : p.status === "in-progress" ? "badge-primary" : "badge-warning"}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                      {p.status === "waiting" ? (
+                        <>
+                          <Hourglass size={12} /> {p.waitTime}
+                        </>
+                      ) : p.status}
+                    </span>
                     <button className="btn btn-primary btn-sm" style={{fontSize:"0.6875rem"}}>Open Chart →</button>
                   </div>
                 </div>

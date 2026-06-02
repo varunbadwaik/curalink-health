@@ -1,4 +1,5 @@
 "use client";
+import { TrendUp } from "@phosphor-icons/react";
 
 const data = [
   { label: "Patients Seen", value: "342", trend: "+12%", trendDir: "up" },
@@ -11,7 +12,12 @@ export default function DoctorAnalyticsPage() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div><h1 className="heading-lg">📈 Provider Analytics</h1><p className="text-muted" style={{marginTop:4}}>Performance and patient outcome metrics (Last 30 Days)</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <TrendUp size={28} weight="duotone" /> Provider Analytics
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>Performance and patient outcome metrics (Last 30 Days)</p>
+        </div>
         <select className="input" style={{ width: 150 }}><option>Last 30 Days</option><option>This Quarter</option><option>Year to Date</option></select>
       </div>
 

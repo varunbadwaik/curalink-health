@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { ChatCircleDots, Phone, VideoCamera, Info, File, Paperclip } from "@phosphor-icons/react";
 
 const contacts = [
   { id: 1, name: "Dr. Mike Torres", role: "General Medicine", status: "online", lastActive: "Just now", unread: 2 },
@@ -21,7 +22,9 @@ export default function TeamChatPage() {
   const [newMsg, setNewMsg] = useState("");
   return (
     <div>
-      <h1 className="heading-lg" style={{ marginBottom: 24 }}>💬 Team Chat</h1>
+      <h1 className="heading-lg" style={{ marginBottom: 24, display: "inline-flex", alignItems: "center", gap: "8px" }}>
+        <ChatCircleDots size={28} weight="duotone" /> Team Chat
+      </h1>
       <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 16, height: "calc(100vh - 160px)" }}>
         {/* Contact List */}
         <div className="card" style={{ padding: 0, display: "flex", flexDirection: "column" }}>
@@ -58,9 +61,15 @@ export default function TeamChatPage() {
               </div>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button className="btn btn-ghost btn-sm">📞</button>
-              <button className="btn btn-ghost btn-sm">📹</button>
-              <button className="btn btn-ghost btn-sm">ℹ️</button>
+              <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+                <Phone size={16} weight="duotone" />
+              </button>
+              <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+                <VideoCamera size={16} weight="duotone" />
+              </button>
+              <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+                <Info size={16} weight="duotone" />
+              </button>
             </div>
           </div>
           
@@ -70,7 +79,7 @@ export default function TeamChatPage() {
                 <div style={{ maxWidth: "75%", padding: "12px 16px", borderRadius: m.isMe ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: m.isMe ? "var(--primary)" : "var(--bg-tertiary)", color: m.isMe ? "#fff" : "var(--text-primary)", fontSize: "0.875rem", lineHeight: 1.5 }}>
                   {m.attachment && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 8, background: "rgba(0,0,0,0.1)", borderRadius: 8, marginBottom: 8 }}>
-                      <span>📄</span> <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{m.attachment}</span>
+                      <File size={16} /> <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{m.attachment}</span>
                     </div>
                   )}
                   {m.text}
@@ -81,7 +90,9 @@ export default function TeamChatPage() {
           </div>
           
           <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border-subtle)", display: "flex", gap: 12 }}>
-            <button className="btn btn-ghost btn-sm">📎</button>
+            <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center" }}>
+              <Paperclip size={16} />
+            </button>
             <input type="text" className="input" placeholder="Type a secure message..." value={newMsg} onChange={e => setNewMsg(e.target.value)} style={{ flex: 1 }} />
             <button className="btn btn-primary">Send</button>
           </div>

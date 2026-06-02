@@ -2,6 +2,27 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
+import {
+  Bell,
+  Heartbeat,
+  Drop,
+  Cookie,
+  Scales,
+  CheckCircle,
+  Warning,
+  Lightbulb,
+  Brain,
+  CalendarDots,
+  Pill,
+  ClipboardText,
+  Flask,
+  VideoCamera,
+  Hospital,
+  Check,
+  TrendDown,
+  TrendUp,
+  ArrowRight
+} from "@phosphor-icons/react";
 
 const upcomingAppointments = [
   { id: 1, doctor: "Dr. Sarah Chen", specialty: "Cardiology", date: "Apr 22, 2026", time: "10:00 AM", type: "In-Person", status: "confirmed" },
@@ -31,9 +52,9 @@ const carePlanTasks = [
 ];
 
 const aiInsights = [
-  { type: "success", icon: "✅", title: "Medication Adherence", message: "Your adherence is 92% this month — great job! Keep it up." },
-  { type: "warning", icon: "⚠️", title: "HbA1c Trending", message: "Your HbA1c has dropped from 7.2% to 6.8%. Continue your dietary changes." },
-  { type: "info", icon: "💡", title: "Exercise Reminder", message: "You've completed 4/5 walks this week. One more to hit your goal!" },
+  { type: "success", icon: <CheckCircle size={18} weight="duotone" />, title: "Medication Adherence", message: "Your adherence is 92% this month — great job! Keep it up." },
+  { type: "warning", icon: <Warning size={18} weight="duotone" />, title: "HbA1c Trending", message: "Your HbA1c has dropped from 7.2% to 6.8%. Continue your dietary changes." },
+  { type: "info", icon: <Lightbulb size={18} weight="duotone" />, title: "Exercise Reminder", message: "You've completed 4/5 walks this week. One more to hit your goal!" },
 ];
 
 export default function PatientDashboard() {
@@ -53,8 +74,8 @@ export default function PatientDashboard() {
           <p className={styles.subtitle}>Here&apos;s your health overview for today</p>
         </div>
         <div className={styles.headerActions}>
-          <button className="btn btn-ghost btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+            <Bell size={16} weight="duotone" />
             Notifications
           </button>
           <button className="btn btn-primary btn-sm">
@@ -66,10 +87,10 @@ export default function PatientDashboard() {
       {/* Vitals Banner */}
       <div className={styles.vitalsGrid}>
         {[
-          { label: "Heart Rate", value: "72", unit: "bpm", icon: "❤️", color: "var(--critical)", trend: "+2" },
-          { label: "Blood Pressure", value: "128/82", unit: "mmHg", icon: "🩸", color: "var(--primary)", trend: "-3" },
-          { label: "Blood Sugar", value: "98", unit: "mg/dL", icon: "🍬", color: "var(--accent)", trend: "-5" },
-          { label: "Weight", value: "178", unit: "lbs", icon: "⚖️", color: "var(--purple)", trend: "-1.2" },
+          { label: "Heart Rate", value: "72", unit: "bpm", icon: <Heartbeat size={24} weight="duotone" />, color: "var(--critical)", trend: "+2" },
+          { label: "Blood Pressure", value: "128/82", unit: "mmHg", icon: <Drop size={24} weight="duotone" />, color: "var(--primary)", trend: "-3" },
+          { label: "Blood Sugar", value: "98", unit: "mg/dL", icon: <Cookie size={24} weight="duotone" />, color: "var(--accent)", trend: "-5" },
+          { label: "Weight", value: "178", unit: "lbs", icon: <Scales size={24} weight="duotone" />, color: "var(--purple)", trend: "-1.2" },
         ].map((vital, i) => (
           <div key={i} className={`${styles.vitalCard} animate-fade-in stagger-${i + 1}`}>
             <div className={styles.vitalHeader}>
@@ -92,7 +113,9 @@ export default function PatientDashboard() {
         {/* AI Insights */}
         <div className={`${styles.section} animate-fade-in stagger-1`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">🧠 AI Health Insights</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <Brain size={20} weight="duotone" /> AI Health Insights
+            </h2>
           </div>
           <div className={styles.insightsList}>
             {aiInsights.map((insight, i) => (
@@ -110,7 +133,9 @@ export default function PatientDashboard() {
         {/* Upcoming Appointments */}
         <div className={`${styles.section} animate-fade-in stagger-2`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">📅 Upcoming Appointments</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <CalendarDots size={20} weight="duotone" /> Upcoming Appointments
+            </h2>
             <a href="/dashboard/patient/appointments" className={styles.viewAll}>View All →</a>
           </div>
           <div className={styles.appointmentList}>
@@ -125,8 +150,8 @@ export default function PatientDashboard() {
                   <span className="text-sm text-muted">{apt.specialty} · {apt.time}</span>
                 </div>
                 <div className={styles.aptMeta}>
-                  <span className={`badge ${apt.type === "Telehealth" ? "badge-primary" : "badge-accent"}`}>
-                    {apt.type === "Telehealth" ? "📹" : "🏥"} {apt.type}
+                  <span className={`badge ${apt.type === "Telehealth" ? "badge-primary" : "badge-accent"}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                    {apt.type === "Telehealth" ? <VideoCamera size={14} weight="duotone" /> : <Hospital size={14} weight="duotone" />} {apt.type}
                   </span>
                   <span className={`badge ${apt.status === "confirmed" ? "badge-accent" : "badge-primary"}`}>
                     {apt.status}
@@ -140,7 +165,9 @@ export default function PatientDashboard() {
         {/* Medications */}
         <div className={`${styles.section} animate-fade-in stagger-3`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">💊 Medications</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <Pill size={20} weight="duotone" /> Medications
+            </h2>
           </div>
           <div className={styles.medList}>
             {medications.map((med, i) => (
@@ -169,15 +196,17 @@ export default function PatientDashboard() {
         {/* Care Plan Progress */}
         <div className={`${styles.section} animate-fade-in stagger-4`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">📋 Today&apos;s Care Plan</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <ClipboardText size={20} weight="duotone" /> Today&apos;s Care Plan
+            </h2>
             <span className="badge badge-primary">{completedTasks}/{carePlanTasks.length}</span>
           </div>
           <div className={styles.taskList}>
             {carePlanTasks.map((task, i) => (
               <div key={i} className={`${styles.taskItem} ${task.completed ? styles.taskDone : ""}`}>
-                <div className={`${styles.taskCheck} ${task.completed ? styles.taskChecked : ""}`}>
+                <div className={`${styles.taskCheck} ${task.completed ? styles.taskChecked : ""}`} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {task.completed && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20,6 9,17 4,12"/></svg>
+                    <Check size={10} weight="bold" style={{ color: "white" }} />
                   )}
                 </div>
                 <span>{task.task}</span>
@@ -200,7 +229,9 @@ export default function PatientDashboard() {
         {/* Recent Lab Results */}
         <div className={`${styles.section} ${styles.sectionWide} animate-fade-in stagger-5`}>
           <div className={styles.sectionHeader}>
-            <h2 className="heading-sm">🔬 Recent Lab Results</h2>
+            <h2 className="heading-sm" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <Flask size={20} weight="duotone" /> Recent Lab Results
+            </h2>
             <a href="/dashboard/patient/labs" className={styles.viewAll}>View All →</a>
           </div>
           <div className={styles.labGrid}>
@@ -216,8 +247,8 @@ export default function PatientDashboard() {
                     {lab.status}
                   </span>
                 </div>
-                <div className={styles.labTrend}>
-                  {lab.trend === "down" ? "📉" : lab.trend === "up" ? "📈" : "➡️"}
+                <div className={styles.labTrend} style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                  {lab.trend === "down" ? <TrendDown size={16} /> : lab.trend === "up" ? <TrendUp size={16} /> : <ArrowRight size={16} />}
                   <span className="text-xs text-muted">{lab.trend}</span>
                 </div>
               </div>

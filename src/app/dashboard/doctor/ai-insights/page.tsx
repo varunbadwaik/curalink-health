@@ -1,4 +1,7 @@
 "use client";
+import React from "react";
+import { Brain, GearSix, WarningCircle, TrendUp, Lightbulb, Books, CheckCircle } from "@phosphor-icons/react";
+
 const insights = [
   { id: 1, type: "anomaly", severity: "critical", title: "Cardiac Risk Cluster Detected", description: "3 patients in your panel (Chang, Rodriguez, Thompson) show correlated cardiac risk factors. AI recommends coordinated care review.", patients: ["Robert Chang", "Maria Rodriguez", "David Thompson"], confidence: 94, actionable: true },
   { id: 2, type: "trend", severity: "warning", title: "Medication Non-Adherence Pattern", description: "Metformin adherence drops 15% on weekends across 8 diabetes patients. Consider simplified dosing schedules.", patients: ["Maria Rodriguez", "John Smith", "+6 others"], confidence: 87, actionable: true },
@@ -8,21 +11,35 @@ const insights = [
 ];
 
 const sevColors: Record<string, string> = { critical: "var(--critical)", warning: "var(--warning)", info: "var(--primary)", success: "var(--accent)" };
-const typeIcons: Record<string, string> = { anomaly: "🔴", trend: "📈", recommendation: "💡", research: "📚", outcome: "✅" };
+
+const typeIcons: Record<string, React.ReactNode> = {
+  anomaly: <WarningCircle size={20} weight="fill" style={{ color: "var(--critical)" }} />,
+  trend: <TrendUp size={20} weight="duotone" style={{ color: "var(--warning)" }} />,
+  recommendation: <Lightbulb size={20} weight="duotone" style={{ color: "var(--primary)" }} />,
+  research: <Books size={20} weight="duotone" style={{ color: "var(--purple)" }} />,
+  outcome: <CheckCircle size={20} weight="duotone" style={{ color: "var(--accent)" }} />
+};
 
 export default function AIInsightsPage() {
   return (
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
-        <div><h1 className="heading-lg">🧠 AI Clinical Insights</h1><p className="text-muted" style={{marginTop:4}}>AI-powered decision support analyzing your patient panel</p></div>
-        <button className="btn btn-ghost btn-sm">⚙️ Configure AI Agent</button>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Brain size={28} weight="duotone" /> AI Clinical Insights
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>AI-powered decision support analyzing your patient panel</p>
+        </div>
+        <button className="btn btn-ghost btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+          <GearSix size={16} /> Configure AI Agent
+        </button>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:16}}>
         {insights.map(ins => (
           <div key={ins.id} className="card" style={{padding:24,borderLeft:`4px solid ${sevColors[ins.severity]}`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
               <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:"1.25rem"}}>{typeIcons[ins.type]}</span>
+                <span style={{ display: "inline-flex", alignItems: "center" }}>{typeIcons[ins.type]}</span>
                 <h3 className="heading-sm">{ins.title}</h3>
                 <span className={`badge ${ins.severity === "critical" ? "badge-critical" : ins.severity === "warning" ? "badge-warning" : ins.severity === "success" ? "badge-accent" : "badge-primary"}`}>{ins.severity}</span>
               </div>

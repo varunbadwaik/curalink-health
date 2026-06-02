@@ -1,4 +1,6 @@
 "use client";
+import { CalendarDots } from "@phosphor-icons/react";
+
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 const hours = ["8:00","9:00","10:00","11:00","12:00","1:00","2:00","3:00","4:00","5:00"];
 const appointments: Record<string, {patient:string;type:string;color:string;span?:number}[]> = {
@@ -22,7 +24,12 @@ export default function SchedulePage() {
   return (
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
-        <div><h1 className="heading-lg">📅 Weekly Schedule</h1><p className="text-muted" style={{marginTop:4}}>April 21–25, 2026 · Dr. Sarah Chen</p></div>
+        <div>
+          <h1 className="heading-lg" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <CalendarDots size={28} weight="duotone" /> Weekly Schedule
+          </h1>
+          <p className="text-muted" style={{marginTop:4}}>April 21–25, 2026 · Dr. Sarah Chen</p>
+        </div>
         <div style={{display:"flex",gap:8}}><button className="btn btn-ghost btn-sm">← Prev</button><button className="btn btn-primary btn-sm">Today</button><button className="btn btn-ghost btn-sm">Next →</button></div>
       </div>
       <div className="card" style={{padding:0,overflow:"auto"}}>
