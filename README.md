@@ -64,7 +64,7 @@ cp .env.example .env
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) to view the portal.
+Open [https://curalink-health-flame.vercel.app/](https://curalink-health-flame.vercel.app/) to view the portal.
 
 ### 4. Run Test Suite
 ```bash
