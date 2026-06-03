@@ -12,6 +12,7 @@ describe("Zustand Stores Unit Tests", () => {
     
     useAppointmentStore.getState().addAppointment({
       id: "APT-TEST",
+      patientName: "John Smith",
       doctorName: "Dr. Test",
       specialty: "General Medicine",
       date: "2026-06-10",
